@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from 'react';
 import { Star, ChevronLeft, ChevronRight, ArrowRight, ArrowLeft } from 'lucide-react';
 const testimonials = [{

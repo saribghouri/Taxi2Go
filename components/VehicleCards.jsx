@@ -1,5 +1,3 @@
-"use client";
-
 import React from 'react';
 import { User, Briefcase } from 'lucide-react';
 const vehicles = [{

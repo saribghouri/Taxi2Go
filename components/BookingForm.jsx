@@ -1,5 +1,3 @@
-"use client";
-
 import { MapPin, ChevronDown, Send } from "lucide-react";
 import { Button } from "./ui/Button";
 import Image from "next/image";

@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "app/layout.jsx", "components/VehicleCards.jsx", "components/ui/Button.jsx", "components/ui/Input.jsx", "components/BookingForm.jsx", "components/Features.jsx", "components/PaymentMethods.jsx", "components/Testimonials.jsx", "app/page.jsx", "components/Hero.jsx", "components/Footer.jsx"  ],
   "exclude": ["node_modules"]
 }

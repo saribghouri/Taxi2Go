@@ -1,11 +1,7 @@
+"use client"
 import React from 'react';
 import { motion } from 'framer-motion';
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'white';
-  size?: 'sm' | 'md' | 'lg';
-  fullWidth?: boolean;
-  children: React.ReactNode;
-}
+
 export const Button = ({
   variant = 'primary',
   size = 'md',
@@ -13,7 +9,7 @@ export const Button = ({
   children,
   className = '',
   ...props
-}: ButtonProps) => {
+}) => {
   const baseStyles = 'inline-flex items-center justify-center font-bold rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   const variants = {
     primary: 'bg-brand-black text-white hover:bg-gray-800 focus:ring-brand-black shadow-lg hover:shadow-xl',
