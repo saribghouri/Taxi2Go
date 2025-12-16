@@ -86,7 +86,7 @@ export default function Home() {
 
           {/* Logo (optional small) */}
           <div className="mb-8">
-            <Image src="/assets/images/logo%201.png" alt="Taxi2Go logo" width={120} height={30} />
+            <Image src="/assets/images/LOGO 1.png" alt="Taxi2Go logo" width={120} height={30} />
           </div>
 
           {/* Menu Items */}
