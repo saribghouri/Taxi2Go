@@ -27,7 +27,7 @@ export default function Home() {
 
         <div className="flex items-center">
           <Image
-            src="/assets/images/logo%201.png"
+            src="/assets/images/LOGO 1.png"
             alt="Taxi2Go logo"
             width={140}
             height={36}
