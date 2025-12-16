@@ -1,65 +1,165 @@
+"use client";
+
+import { useState } from "react";
+import { Hero } from "../components/Hero";
+import { VehicleCards } from "../components/VehicleCards";
+import { Features } from "../components/Features";
+import { Testimonials } from "../components/Testimonials";
+import { PaymentMethods } from "../components/PaymentMethods";
+import { Footer } from "../components/Footer";
+import { Menu, Search, X, Facebook, Instagram, Youtube, Linkedin } from "lucide-react";
 import Image from "next/image";
 
 export default function Home() {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="min-h-screen bg-white font-sans">
+      {/* Header */}
+      <nav className="fixed top-0 left-0 w-full z-50 bg-white shadow-sm px-4 py-4 flex justify-between items-center">
+        <button
+          type="button"
+          className="text-gray-900 md:hidden"
+          aria-label="Open menu"
+          onClick={() => setIsDrawerOpen(true)}
+        >
+          <Menu size={28} strokeWidth={2.5} />
+        </button>
+
+        <div className="flex items-center">
+          <Image
+            src="/assets/images/logo%201.png"
+            alt="Taxi2Go logo"
+            width={140}
+            height={36}
+            priority
+          />
+        </div>
+
+        {/* Right: Search - icon on mobile, input on desktop */}
+        <div className="flex items-center">
+          {/* Mobile icon */}
+          <button type="button" className="text-gray-900 md:hidden" aria-label="Search">
+            <Search size={24} />
+          </button>
+          {/* Desktop input */}
+          <div className="hidden md:block">
+            <div className="relative w-64 lg:w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                type="text"
+                placeholder="Search"
+                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/30 focus:border-[#FF6B4A]"
+              />
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Drawer + Overlay */}
+      {/* Overlay */}
+      {isDrawerOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-50"
+          onClick={() => setIsDrawerOpen(false)}
+          aria-hidden="true"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      )}
+      {/* Drawer Panel */}
+      <div
+        className={`fixed top-0 left-0 h-full w-72 max-w-[80vw] bg-white shadow-2xl z-50 transform transition-transform duration-300 ${
+          isDrawerOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
+      >
+        <div className="relative h-full p-6 flex flex-col">
+          {/* Close */}
+          <button
+            type="button"
+            className="absolute top-4 right-4 text-gray-900"
+            aria-label="Close menu"
+            onClick={() => setIsDrawerOpen(false)}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <X size={24} />
+          </button>
+
+          {/* Logo (optional small) */}
+          <div className="mb-8">
+            <Image src="/assets/images/logo%201.png" alt="Taxi2Go logo" width={120} height={30} />
+          </div>
+
+          {/* Menu Items */}
+          <nav className="mt-2">
+            <ul className="space-y-4">
+              <li>
+                <a
+                  href="#benefits"
+                  className="block text-gray-900 font-semibold hover:text-[#FF6B4A]"
+                  onClick={() => setIsDrawerOpen(false)}
+                >
+                  Benefits
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#specifications"
+                  className="block text-gray-900 font-semibold hover:text-[#FF6B4A]"
+                  onClick={() => setIsDrawerOpen(false)}
+                >
+                  Specifications
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#how-to"
+                  className="block text-gray-900 font-semibold hover:text-[#FF6B4A]"
+                  onClick={() => setIsDrawerOpen(false)}
+                >
+                  How-to
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#contact"
+                  className="block text-gray-900 font-semibold hover:text-[#FF6B4A]"
+                  onClick={() => setIsDrawerOpen(false)}
+                >
+                  Contact Us
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          {/* Social Icons */}
+          <div className="mt-auto pt-8">
+            <div className="flex items-center justify-center gap-6 text-[#FF6B4A]">
+              <a href="#" aria-label="Facebook" className="hover:opacity-80">
+                <Facebook size={22} />
+              </a>
+              <a href="#" aria-label="Instagram" className="hover:opacity-80">
+                <Instagram size={22} />
+              </a>
+              <a href="#" aria-label="YouTube" className="hover:opacity-80">
+                <Youtube size={22} />
+              </a>
+              <a href="#" aria-label="LinkedIn" className="hover:opacity-80">
+                <Linkedin size={22} />
+              </a>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <main>
+        <Hero />
+        <VehicleCards />
+        <Features />
+        <Testimonials />
+        <PaymentMethods />
       </main>
+
+      <Footer />
     </div>
   );
 }
