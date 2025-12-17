@@ -1,5 +1,12 @@
 import React from 'react';
 import Image from 'next/image';
+import { ADLaM_Display } from 'next/font/google'
+
+const adlamDisplay = ADLaM_Display({ 
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 const logos = [
   {
@@ -27,7 +34,7 @@ const logos = [
 export const PaymentMethods = () => {
   return <section className="py-16 bg-white">
       <div className="container mx-auto px-4 text-center">
-        <h2 className="text-3xl font-bold text-black mb-10">We Accept</h2>
+        <h2 className={`text-3xl md:text-[48px] font-bold text-black mb-10 ${adlamDisplay.className}`}>We Accept</h2>
 
         <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10   transition-all duration-300">
           {logos.map((logo, idx) => (

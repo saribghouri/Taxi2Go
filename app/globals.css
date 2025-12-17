@@ -8,6 +8,14 @@ body {
 	overflow-x: hidden;
 }
 
+/* Hero background image utility */
+.bg-hero {
+  background-image: url('/assets/images/Rectangle 2 (1).png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 /* Custom scrollbar for a polished feel */
 ::-webkit-scrollbar {
 	width: 10px;

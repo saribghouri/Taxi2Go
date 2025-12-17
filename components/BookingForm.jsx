@@ -1,102 +1,94 @@
-import { MapPin, ChevronDown, Send } from "lucide-react";
-import { Button } from "./ui/Button";
-import Image from "next/image";
+"use client"
+import { MapPin, Navigation, Car } from "lucide-react"
+import Image from "next/image"
+
 export const BookingForm = () => {
   return (
-    <div className="bg-white/50 backdrop-blur-xs p-6 rounded-3xl shadow-xl w-full max-w-md mx-auto">
-      <div className="mb-6 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 uppercase tracking-tight mb-2">
-          Book a Taxi in Seconds
-        </h2>
-        <p className="text-sm font-semibold text-black uppercase tracking-wide leading-relaxed">
-          Fixed Price, On-time Picked, Local Sydney Drivers. No Surge. No Drama.
+    <div className="w-full max-w-[540px] bg-white/70 backdrop-blur-[1px] rounded-[40px] p-10 shadow-2xl">
+      {/* Heading */}
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold text-black mb-3 leading-tight">BOOK A TAXI IN SECONDS</h1>
+        <p className="text-black text-[20px] leading-relaxed">
+          FIXED PRICE, ON-TIME PICKED, LOCAL SYDNEY DRIVERS. NO SURGE. NO DRAMA.
         </p>
       </div>
 
-      <form className="space-y-3 mb-6">
-        {/* Pickup */}
+      {/* Form Fields */}
+      <div className="space-y-4 mb-6">
+        {/* Pickup Location */}
         <div className="relative">
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
-       <Image src="/assets/images/basil_location-outline.png" alt="" width={20} height={20} />
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
+            <MapPin className="w-5 h-5 text-gray-700" />
+          </div>
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10">
+            <Navigation className="w-5 h-5 text-gray-700" />
           </div>
           <input
             type="text"
             placeholder="Your Picked Location"
-            className="w-full pl-12 pr-10 py-3.5 bg-white border-1 border-[#FF6B4A] rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/50"
+            className="w-full bg-white rounded-full pl-12 pr-12 py-4 text-gray-400 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#FF6347]/50 transition-shadow"
           />
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-            <Send size={16} className="transform rotate-45" />
-            
-          </div>
         </div>
 
-        {/* Dropoff */}
+        {/* Drop-off Location */}
         <div className="relative">
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
-            {/* <MapPin size={20} /> */}
-                        <Image src="/assets/images/Frame 40.png" alt="" width={15} height={15} />
-
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
+            <MapPin className="w-5 h-5 text-gray-700" />
           </div>
           <input
             type="text"
             placeholder="Drop off Location"
-            className="w-full pl-12 pr-4 py-3.5 bg-white border-1 border-[#FF6B4A] rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/50"
+            className="w-full bg-white rounded-full pl-12 pr-4 py-4 text-gray-400 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#FF6347]/50 transition-shadow"
           />
         </div>
 
-        {/* Date/Time */}
+        {/* Vehicle Type Dropdown */}
         <div className="relative">
-          <div className="absolute left-4 top-1/2 -translate-y-1/2">
-            <Image src="/assets/images/Vector (1).png" alt="" width={20} height={20} />
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
+            <Car className="w-5 h-5 text-gray-700" />
           </div>
-          <input
-            type="text"
-            placeholder="Drop off Location" // The image actually repeats "Drop off Location" or similar in the 3rd field, likely a UI mock error, but usually this is Date/Time or Vehicle type. I'll stick to the visual which looks like a dropdown.
-            defaultValue="Drop off Location"
-            className="w-full pl-12 pr-10 py-3.5 bg-white border-1 border-[#FF6B4A] rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/50 appearance-none"
-          />
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-            <ChevronDown size={20} />
+          <select className="w-full bg-white rounded-full pl-12 pr-4 py-4 text-gray-400 outline-none focus:ring-2 focus:ring-[#FF6347]/50 transition-shadow appearance-none cursor-pointer">
+            <option>Drop off Location</option>
+            <option>Sedan</option>
+            <option>SUV</option>
+            <option>Van</option>
+          </select>
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+            <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
           </div>
         </div>
+      </div>
 
-        <Button
-          className="w-full rounded-full py-3 text-lg font-bold uppercase tracking-wider mt-4 shadow-lg shadow-brand-orange/30"
-          style={{
-            backgroundColor: "#FC5E39",
-          }}
-        >
-          Booking
-        </Button>
-      </form>
+      {/* Booking Button */}
+      <button className="w-full cursor-pointer bg-[#FC5E39] hover:bg-[#FC5E39] text-white font-bold text-lg rounded-full py-5 mb-8 transition-colors shadow-lg">
+        BOOKING
+      </button>
 
       {/* Stats */}
-      <div className="flex justify-center items-center gap-8 pt-2 ">
-        <div className="text-center flex justify-center items-center flex-col">
-          <div className="text-2xl mb-1 "><Image src="/assets/images/fluent-color_people-48.png" alt="" width={45} height={30} /></div>
-       
-            <div className="font-bold text-gray-900 text-[25px] leading-none">
-         50,408
+      <div className="flex items-center justify-center gap-8">
+        {/* Happy Rides */}
+        <div className="flex flex-col items-center">
+          <div className="flex items-center gap-1 mb-2">
+            <Image src="/assets/images/fluent-color_people-48.png" alt="People" width={52} height={32} />
           </div>
-          <div className="text-xs text-gray-600 font-medium">Happy Rides</div>
+          <div className="text-3xl font-bold text-black">50,408</div>
+          <div className="text-sm text-black font-medium">Happy Rides</div>
         </div>
-        <div className="h-20 w-px bg-gray-300"></div>
-        {/* <div className="text-center">
-          <div className="text-2xl mb-1 flex justify-center"><Image src="/assets/images/Group.png" alt="" width={50} height={50} /></div>
-          <div className="font-bold text-gray-900 text-[25px] leading-none">
-            4.9/5 
+
+        {/* Divider */}
+        <div className="w-px h-20 bg-gray-300"></div>
+
+        {/* Rating */}
+        <div className="flex flex-col items-center">
+          <div className="flex items-center gap-0.5 mb-2">
+            <Image src="/assets/images/Group.png" alt="Rating Stars" width={60} height={24} />
           </div>
-          <div className="text-xs text-gray-600 font-medium">Rating</div>
-        </div> */}
-          <div className="text-center flex justify-center items-center flex-col">
-          <div className="text-2xl mt-[10px] "><Image src="/assets/images/Group.png" alt="" width={50} height={60} /></div>
-       
-            <div className="font-bold text-gray-900 text-[25px] mt-[10px] leading-none">
-          4.9/5 
-          </div>
-          <div className="text-xs text-gray-600 font-medium">Happy Rides</div>
+          <div className="text-3xl font-bold text-black">4.9/5</div>
+          <div className="text-sm text-black font-medium">Rating</div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

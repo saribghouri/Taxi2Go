@@ -5,17 +5,7 @@ import Image from 'next/image';
 export const Features = () => {
   return <>
       {/* Company Info Section */}
-      <section className="py-4 bg-white text-center">
-        <div className="container mx-auto  max-w-3xl">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 uppercase leading-tight">
-            We're Australia's Cab <br /> Company
-          </h2>
-          <p className="text-black text-lg leading-relaxed mx-2">
-            With Australia's largest team of Professional Drivers, we're ready
-            whenever you are with a Fixed Price and no surge pricing, ever.
-          </p>
-        </div>
-      </section>
+  
 
       {/* Ride Safety Section */}
       <section className="py-16 bg-gray-50">
@@ -41,7 +31,7 @@ export const Features = () => {
 
             <div className="w-full md:w-1/2 flex items-end justify-center md:justify-end">
               <Image
-                src="/assets/images/half-phone.png"
+                src="/assets/images/half-phone2.png"
                 alt="App preview"
                 width={360}
                 height={360}

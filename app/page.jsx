@@ -7,6 +7,7 @@ import { Features } from "../components/Features";
 import { Testimonials } from "../components/Testimonials";
 import { PaymentMethods } from "../components/PaymentMethods";
 import { Footer } from "../components/Footer";
+import { Header } from "../components/Header";
 import { Menu, Search, X, Facebook, Instagram, Youtube, Linkedin } from "lucide-react";
 import Image from "next/image";
 
@@ -14,11 +15,16 @@ export default function Home() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   return (
     <div className="min-h-screen bg-white font-sans">
-      {/* Header */}
-      <nav className="fixed top-0 left-0 w-full z-50 bg-white shadow-sm px-4 py-4 flex justify-between items-center">
+      {/* Desktop Header - hidden on mobile */}
+      <div className="hidden lg:block">
+        <Header />
+      </div>
+
+      {/* Mobile Header */}
+      <nav className="block lg:hidden fixed top-0 left-0 w-full z-50 bg-white shadow-sm px-4 py-4 flex justify-between items-center gap-4">
         <button
           type="button"
-          className="text-gray-900 md:hidden"
+          className="text-gray-900"
           aria-label="Open menu"
           onClick={() => setIsDrawerOpen(true)}
         >
@@ -35,15 +41,11 @@ export default function Home() {
           />
         </div>
 
-        {/* Right: Search - icon on mobile, input on desktop */}
-        <div className="flex items-center">
-          {/* Mobile icon */}
-          <button type="button" className="text-gray-900 md:hidden" aria-label="Search">
-            <Search size={24} />
-          </button>
-          {/* Desktop input */}
+        {/* Right: Search - icon and bar */}
+        <div className="flex items-center gap-3">
+          {/* Search bar on md screens */}
           <div className="hidden md:block">
-            <div className="relative w-64 lg:w-80">
+            <div className="relative w-48 lg:w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
               <input
                 type="text"
@@ -52,6 +54,10 @@ export default function Home() {
               />
             </div>
           </div>
+          {/* Search icon on all screens */}
+          <button type="button" className="text-gray-900" aria-label="Search">
+            <Search size={24} />
+          </button>
         </div>
       </nav>
 
