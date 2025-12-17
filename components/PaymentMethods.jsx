@@ -36,15 +36,51 @@ export const PaymentMethods = () => {
       <div className="container mx-auto px-4 text-center">
         <h2 className={`text-3xl md:text-[48px] font-bold text-black mb-10 ${adlamDisplay.className}`}>We Accept</h2>
 
-        <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10   transition-all duration-300">
+        {/* Mobile: 2 rows layout */}
+        <div className="md:hidden flex flex-col items-center gap-4 max-w-md mx-auto">
+          {/* First row - 2 items */}
+          <div className="flex justify-center items-center gap-4">
+            {logos.slice(0, 2).map((logo, idx) => (
+              <div key={idx} className="flex items-center justify-center">
+                <Image
+                  src={logo.src}
+                  alt={logo.alt}
+                  width={idx === 1 ? 110 : 80}
+                  height={idx === 1 ? 60 : 50}
+                  className={`object-contain ${idx === 1 ? 'w-[110px] h-[60px]' : 'w-[80px] h-[50px]'}`}
+                  priority
+                />
+              </div>
+            ))}
+          </div>
+          
+          {/* Second row - 3 items */}
+          <div className="flex justify-center items-center gap-4">
+            {logos.slice(2, 5).map((logo, idx) => (
+              <div key={idx + 2} className="flex items-center justify-center">
+                <Image
+                  src={logo.src}
+                  alt={logo.alt}
+                  width={idx === 0 || idx === 1 ? 110 : 80}
+                  height={idx === 0 || idx === 1 ? 60 : 50}
+                  className={`object-contain ${idx === 0 || idx === 1 ? 'w-[110px] h-[60px]' : 'w-[80px] h-[50px]'}`}
+                  priority
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop: Single row layout */}
+        <div className="hidden md:flex justify-center items-center gap-10">
           {logos.map((logo, idx) => (
-            <div key={idx} className="h-10 md:h-12 w-auto flex items-center">
+            <div key={idx} className="flex items-center justify-center">
               <Image
                 src={logo.src}
                 alt={logo.alt}
-                width={180}
-                height={80}
-                className="object-contain max-h-full"
+                width={idx === 1 ? 160 : 120}
+                height={idx === 1 ? 80 : 60}
+                className={`object-contain ${idx === 1 ? 'w-[160px] h-[80px]' : 'w-[120px] h-[60px]'}`}
                 priority
               />
             </div>
