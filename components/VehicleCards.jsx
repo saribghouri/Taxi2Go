@@ -1,5 +1,7 @@
+"use client"
 import { User, Briefcase } from "lucide-react"
 import { ADLaM_Display } from 'next/font/google'
+import { useState } from 'react'
 
 const adlamDisplay = ADLaM_Display({ 
   weight: '400',
@@ -35,26 +37,52 @@ const vehicles = [
 ]
 
 export const VehicleCards = () => {
+  const [selectedCard, setSelectedCard] = useState(null)
+
   return (
     <section className="py-8 md:py-16 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className={`text-3xl md:text-[48px] font-bold text-center text-gray-900 mb-8 md:mb-12 ${adlamDisplay.className}`}>
+        <h2 className={`text-[32px] md:text-[48px] font-bold text-center text-gray-900 mb-8 md:mb-12 ${adlamDisplay.className}`}>
           Choose A Vehicle That Fit
         </h2>
 
         {/* Mobile: Grid layout - no scroll */}
-        <div className="grid grid-cols-3 md:hidden gap-2">
+        <div className="grid grid-cols-3 md:hidden gap-3">
           {vehicles.map((vehicle, index) => (
             <div
               key={index}
-              className="bg-gray-50 rounded-lg p-2 flex flex-col items-center hover:shadow-lg transition-shadow duration-300"
+              onClick={() => setSelectedCard(selectedCard === index ? null : index)}
+              className={`rounded-lg p-3 flex flex-col items-center hover:shadow-lg transition-all duration-300 cursor-pointer ${
+                selectedCard === index ? 'bg-orange-500' : 'bg-gray-50'
+              }`}
             >
-              <div className="w-full mb-1">
-                <h3 className="text-xs font-bold text-gray-900 text-center">{vehicle.name}</h3>
-                <p className="text-[8px] text-gray-500 text-center">{vehicle.passengers}</p>
+              <div className="w-full mb-2 flex justify-between items-start">
+                <div className="flex-1">
+                  <h3 className={`text-[14px] font-bold text-center ${
+                    selectedCard === index ? 'text-white' : 'text-gray-900'
+                  }`}>{vehicle.name}</h3>
+                  <p className={`text-[11px] text-center ${
+                    selectedCard === index ? 'text-white/90' : 'text-gray-500'
+                  }`}>{vehicle.passengers}</p>
+                </div>
+                <button className="transition-colors flex-shrink-0 ml-1">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill={selectedCard === index ? "red" : "none"}
+                    stroke={selectedCard === index ? "red" : "currentColor"}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={selectedCard === index ? 'text-red-500' : 'text-gray-300'}
+                  >
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                </button>
               </div>
 
-              <div className="h-12 w-full mb-2 flex items-center justify-center">
+              <div className="h-16 w-full mb-2 flex items-center justify-center">
                 <img
                   src={vehicle.image || "/placeholder.svg"}
                   alt={vehicle.name}
@@ -62,17 +90,19 @@ export const VehicleCards = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-center gap-1 text-gray-600 text-[7px] w-full border-t border-gray-200 pt-1">
+              <div className={`flex items-center justify-center gap-3.5 text-[9px] w-full border-t pt-2 ${
+                selectedCard === index ? 'text-white border-white/30' : 'text-gray-600 border-gray-200'
+              }`}>
                 <div className="flex items-center gap-0.5">
-                  <User className="w-2.5 h-2.5" />
+                  <User className="w-3 h-3" />
                   <span>{vehicle.capacity}</span>
                 </div>
                 <div className="flex items-center gap-0.5">
-                  <Briefcase className="w-2.5 h-2.5" />
+                  <Briefcase className="w-3 h-3" />
                   <span>{vehicle.luggage}</span>
                 </div>
                 <div className="flex items-center gap-0.5">
-                  <Briefcase className="w-2.5 h-2.5" />
+                  <Briefcase className="w-3 h-3" />
                   <span>{vehicle.bags}</span>
                 </div>
               </div>
@@ -85,24 +115,33 @@ export const VehicleCards = () => {
           {vehicles.map((vehicle, index) => (
             <div
               key={index}
-              className="bg-gray-50 rounded-xl md:rounded-2xl p-4 md:p-6 flex flex-col items-center hover:shadow-lg transition-shadow duration-300"
+              onClick={() => setSelectedCard(selectedCard === index ? null : index)}
+              className={`rounded-xl md:rounded-2xl p-4 md:p-6 flex flex-col items-center hover:shadow-lg transition-all duration-300 cursor-pointer ${
+                selectedCard === index ? 'bg-orange-500' : 'bg-gray-50'
+              }`}
             >
               <div className="w-full flex justify-between items-start mb-3 md:mb-4">
                 <div>
-                  <h3 className="text-base md:text-xl font-bold text-gray-900">{vehicle.name}</h3>
-                  <p className="text-xs md:text-sm text-gray-500">{vehicle.passengers}</p>
+                  <h3 className={`text-base md:text-xl font-bold ${
+                    selectedCard === index ? 'text-white' : 'text-gray-900'
+                  }`}>{vehicle.name}</h3>
+                  <p className={`text-xs md:text-sm ${
+                    selectedCard === index ? 'text-white/90' : 'text-gray-500'
+                  }`}>{vehicle.passengers}</p>
                 </div>
-                <button className="text-gray-300 hover:text-orange-500 transition-colors">
+                <button className="transition-colors">
                   <svg
                     width="20"
                     height="20"
                     viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
+                    fill={selectedCard === index ? "red" : "none"}
+                    stroke={selectedCard === index ? "red" : "currentColor"}
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="md:w-6 md:h-6"
+                    className={`md:w-6 md:h-6 ${
+                      selectedCard === index ? 'text-red-500' : 'text-gray-300 hover:text-orange-500'
+                    }`}
                   >
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                   </svg>
@@ -117,7 +156,9 @@ export const VehicleCards = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-center gap-4 md:gap-8 text-gray-600 text-xs md:text-sm w-full border-t border-gray-200 pt-3 md:pt-4">
+              <div className={`flex items-center justify-center gap-4 md:gap-8 text-xs md:text-sm w-full border-t pt-3 md:pt-4 ${
+                selectedCard === index ? 'text-white border-white/30' : 'text-gray-600 border-gray-200'
+              }`}>
                 <div className="flex items-center gap-1">
                   <User className="w-4 h-4 md:w-5 md:h-5" />
                   <span>{vehicle.capacity}</span>
