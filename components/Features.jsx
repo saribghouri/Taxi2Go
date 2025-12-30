@@ -107,7 +107,7 @@ const listItemVariants = {
 
       {/* Image - Right on desktop, bottom on mobile */}
 <motion.div
-  className="w-full max-w-md lg:max-w-none lg:w-1/2 flex justify-center lg:justify-end"
+  className="w-full max-w-full lg:max-w-none lg:w-1/2 flex justify-center lg:justify-end"
   initial="offscreen"
   whileInView="onscreen"
   viewport={{ once: true, amount: 0.3 }}
@@ -119,7 +119,7 @@ const listItemVariants = {
     width={660}
     height={660}
     priority
-    className="object-contain w-full h-auto max-w-[460px] sm:max-w-[520px] lg:max-w-none mb-[-40px] sm:mb-[-80px] lg:mb-[-175px]"
+    className="object-contain w-full h-auto max-w-full sm:max-w-[520px] lg:max-w-none mb-0 sm:mb-[-80px] lg:mb-[-175px]"
   />
 </motion.div>
     </div>
