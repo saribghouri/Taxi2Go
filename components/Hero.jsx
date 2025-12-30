@@ -12,7 +12,19 @@ export const Hero = () => {
 
       {/* Content */}
       <div className="container mx-auto px-4 relative z-10 min-h-screen flex items-center pt-32 pb-20">
-        <div className="w-full max-w-7xl">
+        <div className="w-full max-w-7xl space-y-6">
+          {/* Hero Text Above Booking Form */}
+          {/* <div className="max-w-2xl">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+              Book a Taxi in Sydney in Seconds
+            </h1>
+            <p className="text-xl md:text-2xl text-white/95 mb-3 font-medium">
+              Fixed price rides with licensed Sydney taxis. No surge pricing. No delays.
+            </p>
+            <p className="text-sm md:text-base text-white/80">
+              Available 24/7 across Sydney · Instant confirmation
+            </p>
+          </div> */}
           <BookingForm />
         </div>
       </div>
