@@ -162,7 +162,7 @@ export default function Home() {
         <VehicleCards />
         <Features />
         <Testimonials />
-        <PaymentMethods />
+        {/* <PaymentMethods /> */}
       </main>
 
       <Footer />

@@ -11,30 +11,30 @@ const adlamDisplay = ADLaM_Display({
 const testimonials = [
   {
     id: 1,
-    name: 'Emily Turner',
-    location: 'Melbourne',
+    name: 'Mark H.',
+    location: 'Sydney CBD',
     image:
-      '/assets/images/Rectangle 18.png',
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
     rating: 5,
-    text: 'My experience with Taxi2Go has been nothing short of excellent. I booked a full-day service for business appointments, and the driver handled everything with great professionalism. He knew the routes, avoided traffic intelligently.'
+    text: 'Booked online in under a minute. Driver arrived early. Solid service.'
   },
   {
     id: 2,
-    name: 'James Wilson',
-    location: 'Sydney',
+    name: 'Sarah K.',
+    location: 'Mascot',
     image:
-      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
     rating: 5,
-    text: 'Reliable and fast. The app is super easy to use and the drivers are always polite. Best way to get around the city without the hassle of parking.'
+    text: 'Best option for airport runs. I always book my airport taxi with Taxi2Go.'
   },
   {
     id: 3,
-    name: 'Sarah Chen',
-    location: 'Brisbane',
+    name: 'Daniel P.',
+    location: 'Parramatta',
     image:
-      'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80',
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
     rating: 5,
-    text: 'I love the fixed price feature. No more watching the meter tick up in traffic. The cars are clean and comfortable. Highly recommended!'
+    text: 'Easy Sydney cab booking, clean car, polite driver.'
   }
 ];
 
@@ -53,10 +53,10 @@ export const Testimonials = () => {
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <h2 className={`text-3xl md:text-[48px] font-bold text-center text-gray-900 mb-16 ${adlamDisplay.className}`}>
-          Honest Reviews From  Our Riders
+          Honest Reviews From Our Riders
         </h2>
 
-        {/* Mobile: keep single-card slider with dots */}
+        {/* Mobile: single-card slider with dots */}
         <div className="block md:hidden">
           <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 border border-gray-100">
             <div className="flex flex-row gap-6 items-start">
@@ -138,7 +138,7 @@ export const Testimonials = () => {
                 </div>
               </div>
 
-              <p className="text-black leading-relaxed text-base md:text-lg mt-4">
+              <p className="text-black leading-relaxed text-base md:text-lg mt-4 flex-1">
                 {testimonial.text}
               </p>
             </div>
