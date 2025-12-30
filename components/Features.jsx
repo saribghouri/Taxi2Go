@@ -71,24 +71,26 @@ const listItemVariants = {
 
         {/* Features List */}
         <div className="space-y-4 pt-4">
-          {[
-            "Live GPS tracking",
-            "Licensed professional drivers",
-            "24/7 customer support"
-          ].map((text, i) => (
-            <motion.div
-              key={i}
-              className="flex items-start gap-3"
-              custom={i}
-              initial="offscreen"
-              whileInView="onscreen"
-              viewport={{ once: true }}
-              variants={listItemVariants}
-            >
-              <CheckCircle className="w-6 h-6 text-[#FC5E39] flex-shrink-0 mt-1" />
-              <span className="text-[#3f3f3f]">{text}</span>
-            </motion.div>
-          ))}
+          <div className="flex flex-col items-center justify-center w-full sm:flex-row sm:items-start sm:justify-center sm:w-auto gap-4">
+            {[
+              "Live GPS tracking",
+              "24/7 customer support",
+              "Licensed professional drivers"
+            ].map((text, i) => (
+              <motion.div
+                key={i}
+                className="flex items-start gap-3"
+                custom={i}
+                initial="offscreen"
+                whileInView="onscreen"
+                viewport={{ once: true }}
+                variants={listItemVariants}
+              >
+                <CheckCircle className="w-6 h-6 text-[#FC5E39] flex-shrink-0 mt-1" />
+                <span className="text-[#3f3f3f]">{text}</span>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
         {/* CTA Button */}
