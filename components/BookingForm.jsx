@@ -72,6 +72,7 @@ export const BookingForm = () => {
     expiry: "",
     cvv: "",
     cardHolder: "",
+    bookingTime: "now",
   })
 
   useEffect(() => {
@@ -228,6 +229,37 @@ export const BookingForm = () => {
               ))}
             </div>
           )}
+        </div>
+
+        <div className="flex gap-8 items-center justify-center mb-4">
+          <label className="flex items-center cursor-pointer">
+            <input
+              type="radio"
+              name="bookingTime"
+              value="now"
+              checked={form.bookingTime === "now"}
+              onChange={e => setForm(prev => ({ ...prev, bookingTime: e.target.value }))}
+              className="hidden"
+            />
+            <span className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 ${form.bookingTime === "now" ? 'border-green-500' : 'border-gray-400'}`}>
+              {form.bookingTime === "now" && <span className="w-3 h-3 rounded-full bg-green-500"></span>}
+            </span>
+            <span className="text-gray-900 font-bold text-[15px] md:text-lg whitespace-nowrap">Book for now</span>
+          </label>
+          <label className="flex items-center cursor-pointer">
+            <input
+              type="radio"
+              name="bookingTime"
+              value="later"
+              checked={form.bookingTime === "later"}
+              onChange={e => setForm(prev => ({ ...prev, bookingTime: e.target.value }))}
+              className="hidden"
+            />
+            <span className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-2 ${form.bookingTime === "later" ? 'border-green-500' : 'border-gray-400'}`}>
+              {form.bookingTime === "later" && <span className="w-3 h-3 rounded-full bg-green-500"></span>}
+            </span>
+            <span className="text-gray-900 font-bold text-[15px] md:text-lg whitespace-nowrap">Book for later</span>
+          </label>
         </div>
       </div>
       <button

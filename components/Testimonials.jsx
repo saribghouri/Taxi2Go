@@ -53,7 +53,7 @@ export const Testimonials = () => {
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <h2 className={`text-3xl md:text-[48px] font-bold text-center text-gray-900 mb-16 ${adlamDisplay.className}`}>
-          Honest Reviews From Our Riders
+        Real reviews from Sydney riders who book with Taxi2Go every day
         </h2>
 
         {/* Mobile: single-card slider with dots */}
@@ -143,6 +143,15 @@ export const Testimonials = () => {
               </p>
             </div>
           ))}
+        </div>
+
+        {/* Final CTA Section */}
+        <div className="w-full mt-16 mb-2 flex flex-col items-center justify-center bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 rounded-3xl shadow-2xl py-10 px-6 md:px-12 animate-in fade-in duration-700">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-3 drop-shadow-lg tracking-tight">Need a Taxi Right Now?</h2>
+          <p className="text-lg md:text-xl text-white/90 mb-6 text-center max-w-2xl drop-shadow">Book a taxi near you in Sydney — fast, simple, and reliable.</p>
+          <button className="bg-white text-orange-600 font-bold text-lg md:text-xl px-8 py-4 rounded-full shadow-lg hover:bg-orange-100 transition-all duration-200 scale-105 hover:scale-110">
+            Book Taxi Now
+          </button>
         </div>
       </div>
     </section>
