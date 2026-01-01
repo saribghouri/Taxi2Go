@@ -34,11 +34,22 @@ const listItemVariants = {
   })
 };
   return <>
-      {/* Company Info Section */}
-  
+           <div className="flex flex-col  bg-gradient-to-b from-[#ffffff] to-[#ffffff]">
+      {/* Call Button */}
+      <div className="flex items-center justify-center py-2">
+       
+      </div>
 
-      {/* Ride Safety Section */}
-   <section className=" md:py-10 bg-white overflow-hidden">
+      {/* Airport & Safety Sections */}
+      <main >
+    
+            <AirportSection />
+            {/* <SafetySection /> */}
+        
+      
+      </main>
+    </div>
+   <section className=" md:py-10 mt-[80px] bg-white overflow-hidden">
   <div className="container mx-auto px-4 sm:px-6 lg:px-8">
     <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
       {/* Text Content - Left on desktop, top on mobile */}
@@ -127,20 +138,6 @@ const listItemVariants = {
     </div>
   </div>
 </section>
-        <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#ffffff] to-[#ffffff]">
-      {/* Call Button */}
-      <div className="flex items-center justify-center py-12">
-       
-      </div>
-
-      {/* Airport & Safety Sections */}
-      <main >
-    
-            <AirportSection />
-            {/* <SafetySection /> */}
-        
-      
-      </main>
-    </div>
+  
     </>;
 };

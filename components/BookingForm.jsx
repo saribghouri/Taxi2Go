@@ -8,19 +8,19 @@ const VEHICLES = [
     id: "sedan",
     name: "Sedan Taxi",
     capacity: "1 to 4 person",
-    image: "/assets/images/sedan.png",
+    image: "/assets/images/sedan-removebg-preview.png",
   },
   {
     id: "suv",
     name: "SUV Taxi",
     capacity: "1 to 7 person",
-    image: "/assets/images/suv.png",
+    image: "/assets/images/suv-removebg-preview.png",
   },
   {
     id: "maxi",
     name: "Maxi Taxi",
     capacity: "1 to 11 person",
-    image: "/assets/images/11 seater.png",
+    image: "/assets/images/11_seater-removebg-preview.png",
   },
 ]
 
@@ -203,23 +203,27 @@ export const BookingForm = () => {
                   key={v.id}
                   type="button"
                   onClick={() => selectVehicle(v.name)}
-                  className="w-full flex items-center p-3 hover:bg-orange-50 transition-colors border-b border-[#ece6e6] last:border-0"
+                  className={`w-full flex items-center p-3 transition-colors border-b border-[#ece6e6] last:border-0 ${form.vehicle === v.name ? 'bg-orange-100' : 'hover:bg-orange-50'}`}
                 >
-                  <div className="w-20 h-12 flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden mr-4">
-                    <img
-                      src={v.image || "/placeholder.svg"}
-                      alt={v.name}
-                      className="w-full h-full object-contain p-1"
-                    />
-                  </div>
-                  <div className="flex-1 flex justify-between text-left">
-                    <div className="font-bold text-gray-900 text-sm md:text-base">{v.name}</div>
-                    <div className="flex items-center gap-1 text-gray-500 text-xs md:text-sm mt-0.5">
-                      {v.capacity}
-                      <Users className="w-3 h-3 mr-1" />
+                    <div className="w-20 h-12 flex-shrink-0  rounded-lg overflow-hidden mr-4">
+                      <img
+                        src={v.image || "/placeholder.svg"}
+                        alt={v.name}
+                        className="w-full h-full object-contain p-1"
+                      />
                     </div>
-                  </div>
-                  {form.vehicle === v.name && <div className="w-2 h-2 rounded-full bg-[#FC5E39] ml-2" />}
+                    <div className="flex-1 flex flex-col text-left">
+                      <div className="font-bold text-gray-900 text-sm md:text-base">{v.name}</div>
+                      <div className="flex items-center gap-1 text-gray-500 text-xs md:text-sm mt-1">
+                        {v.capacity}
+                        <Users className="w-3 h-3 ml-1" />
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end min-w-[90px]">
+                      <div className="font-bold text-[#333] text-xs md:text-sm">Fixed Price</div>
+                      <div className="text-[#FC5E39] text-xs md:text-sm mt-1">$XX.XX</div>
+                    </div>
+                    {/* Removed orange dot indicator for selected vehicle */}
                 </button>
               ))}
             </div>

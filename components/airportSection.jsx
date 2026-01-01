@@ -3,7 +3,7 @@ import { Plane, CheckCircle } from "lucide-react"
 
 export function AirportSection() {
   return (
-    <section className="py-16 lg:py-24 bg-[#ffffff]">
+    <section className="py-12 lg:py-14 bg-[#ffffff]">
       <div className="container mx-auto gap-4">
         <div className="flex flex-col lg:flex-row-reverse items-center justify-center gap-12 lg:gap-24 xl:gap-32">
           {/* Content - Right Side */}
