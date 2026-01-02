@@ -11,7 +11,7 @@ export const Hero = () => {
 </div>
 
       {/* Content */}
-      <div className="container  px-4 relative z-10 min-h-screen flex items-center justify-start pt-32 pb-20">
+      <div className="container  px-4 relative z-10  flex items-center justify-start pt-32 pb-20">
         <div className="w-full max-w-7xl space-y-6 md:ml-12 lg:ml-16">
           {/* Hero Text Above Booking Form */}
           {/* <div className="max-w-2xl">

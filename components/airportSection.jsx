@@ -26,16 +26,16 @@ export function AirportSection() {
             </p>
 
             {/* Features List */}
-            <div className="space-y-4 pt-4">
-              <div className="flex items-start gap-3 justify-center lg:justify-start">
+            <div className="space-y-4 pt-4 mx-auto lg:mx-0">
+              <div className="flex items-start gap-3 justify-start">
                 <CheckCircle className="w-6 h-6 text-[#FC5E39] flex-shrink-0 mt-1" />
                 <span className="text-[#3f3f3f]">On-time pickups guaranteed</span>
               </div>
-              <div className="flex items-start gap-3 justify-center lg:justify-start">
+              <div className="flex items-start gap-3 justify-start">
                 <CheckCircle className="w-6 h-6 text-[#FC5E39] flex-shrink-0 mt-1" />
                 <span className="text-[#3f3f3f]">Luggage-friendly vehicles</span>
               </div>
-              <div className="flex items-start gap-3 justify-center lg:justify-start">
+              <div className="flex items-start gap-3 justify-start">
                 <CheckCircle className="w-6 h-6 text-[#FC5E39] flex-shrink-0 mt-1" />
                 <span className="text-[#3f3f3f]">Fixed transparent pricing</span>
               </div>

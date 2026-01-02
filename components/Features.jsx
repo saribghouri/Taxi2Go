@@ -49,10 +49,9 @@ const listItemVariants = {
       
       </main>
     </div>
-   <section className=" md:py-10 mt-[80px] bg-white overflow-hidden">
+   {/* <section className=" md:py-10 mt-[80px] bg-white overflow-hidden">
   <div className="container mx-auto px-4 sm:px-6 lg:px-8">
     <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
-      {/* Text Content - Left on desktop, top on mobile */}
       <motion.div
         className="flex flex-col space-y-6 lg:space-y-8 flex-1 text-center lg:text-left"
         initial="offscreen"
@@ -60,13 +59,11 @@ const listItemVariants = {
         viewport={{ once: true, amount: 0.3 }}
         variants={textVariants}
       >
-        {/* Label */}
         <div className="inline-flex items-center gap-2 w-fit mx-auto lg:mx-0">
           <Shield className="w-5 h-5 text-[#FC5E39]" />
           <span className="text-sm font-semibold text-[#FC5E39] uppercase tracking-wider">Your Safety</span>
         </div>
 
-        {/* Heading */}
         <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#FC5E39]">
           Ride Safely,{" "}
           <span className="text-[#000000]">
@@ -74,13 +71,11 @@ const listItemVariants = {
           </span>
         </h2>
 
-        {/* Description */}
         <p className="text-lg text-[#3f3f3f] max-w-xl mx-auto lg:mx-0">
           Track your ride live with GPS, travel with licensed drivers, and arrive safely with a trusted Sydney taxi
           service.
         </p>
 
-        {/* Features List */}
         <div className="space-y-4 pt-4">
           <div className="flex flex-col items-center justify-center w-full sm:flex-row sm:items-start sm:justify-center sm:w-auto gap-4">
             {[
@@ -104,7 +99,6 @@ const listItemVariants = {
           </div>
         </div>
 
-        {/* CTA Button */}
         <motion.div
           className="pt-6"
           initial={{ opacity: 0, y: 50 }}
@@ -118,7 +112,6 @@ const listItemVariants = {
         </motion.div>
       </motion.div>
 
-      {/* Image - Right on desktop, bottom on mobile */}
 <motion.div
   className="w-full max-w-full lg:max-w-none lg:w-1/2 flex justify-center lg:justify-end"
   initial="offscreen"
@@ -137,7 +130,7 @@ const listItemVariants = {
 </motion.div>
     </div>
   </div>
-</section>
+</section> */}
   
     </>;
 };

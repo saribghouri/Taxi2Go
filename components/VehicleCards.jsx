@@ -40,7 +40,7 @@ export const VehicleCards = () => {
   const [selectedCard, setSelectedCard] = useState(null)
 
   return (
-    <section className="py-8 md:py-16 bg-white">
+    <section id="vehicle-cards" className="py-8 md:py-16 bg-white">
       <div className="container mx-auto px-4">
         <section className="py-4 bg-white text-center mt-[40px]">
           <div className="container mx-auto  max-w-4xl">
@@ -164,7 +164,7 @@ export const VehicleCards = () => {
           ))}
         </div>
       </div>
-      <section className="py-4 bg-white text-center mt-[60px]">
+      {/* <section className="py-4 bg-white text-center mt-[60px]">
         <div className="container mx-auto  max-w-4xl">
           <h2 className={`text-[32px] md:text-[48px] font-bold text-center text-gray-900 mb-2 ${adlamDisplay.className}`}>
             We’re Australia’s Taxi Company
@@ -172,7 +172,7 @@ export const VehicleCards = () => {
           <p className="text-center px-[15px] text-gray-600 text-base md:text-lg mb-8 md:mb-12 max-w-3xl mx-auto">
             Taxi2Go provides reliable taxi services across Sydney with professional local drivers, transparent pricing, and no surge charges.         </p>
         </div>
-      </section>
+      </section> */}
     </section>
   )
 }

@@ -1,8 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 export const MobileBottomBar = () => {
+  const [showBar, setShowBar] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Get the booking form element
+      const bookingForm = document.getElementById('booking-form');
+      if (bookingForm) {
+        const rect = bookingForm.getBoundingClientRect();
+        const formBottom = rect.bottom + window.scrollY;
+        // Show bar when scrolled past booking form bottom
+        if (window.scrollY + window.innerHeight >= formBottom) {
+          setShowBar(true);
+        } else {
+          setShowBar(false);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  if (!showBar) return null;
+
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden bg-[#FF6347] shadow-2xl border border-orange-600 rounded-2xl">
+    <div className="fixed bottom-4  left-4 right-4 z-50 md:hidden bg-[#FF6347] shadow-2xl border border-orange-600 rounded-2xl">
       <div className="px-4 py-3 flex items-center justify-between">
         {/* Left side - Text */}
         <div className="flex-1">
