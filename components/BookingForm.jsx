@@ -66,13 +66,15 @@ export const BookingForm = () => {
     name: "",
     email: "",
     phone: "",
-    payment: "cash",
+    payment: "card",
     otp: "",
     cardNumber: "",
     expiry: "",
     cvv: "",
     cardHolder: "",
     bookingTime: "now",
+    pickupDate: "",
+    pickupTime: "",
   })
 
   useEffect(() => {
@@ -261,6 +263,32 @@ export const BookingForm = () => {
             <span className="text-gray-900 font-bold text-[15px] md:text-lg whitespace-nowrap">Book for later</span>
           </label>
         </div>
+
+        {/* Date and Time Pickers - Show when "Book for later" is selected */}
+        {form.bookingTime === "later" && (
+          <div className="flex gap-3 mt-4">
+            <div className="flex-1">
+              <label className="text-xs text-gray-600 mb-1 block">Pickup date</label>
+              <input
+                type="date"
+                name="pickupDate"
+                value={form.pickupDate}
+                onChange={handleChange}
+                className="w-full bg-white rounded-3xl px-4 py-3 text-[14px] md:text-base text-gray-700 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="text-xs text-gray-600 mb-1 block">Pickup time</label>
+              <input
+                type="time"
+                name="pickupTime"
+                value={form.pickupTime}
+                onChange={handleChange}
+                className="w-full bg-white rounded-3xl px-4 py-3 text-[14px] md:text-base text-gray-700 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors"
+              />
+            </div>
+          </div>
+        )}
       </div>
       <button
         className="w-full cursor-pointer bg-[#FC5E39] hover:bg-[#e54d2e] text-white font-bold text-[17px] md:text-lg rounded-full py-3.5 md:py-4 transition-colors shadow-lg mb-4"
