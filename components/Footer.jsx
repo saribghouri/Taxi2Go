@@ -52,11 +52,11 @@ export const Footer = () => {
             <span className="absolute bottom-0 left-0 w-12 h-1 bg-brand-orange"></span>
           </h3>
           <ul className="space-y-3">
-
+            <li><a href="#" className="text-black hover:text-brand-orange transition-colors duration-300 block">Sydney CBD</a></li>
+            <li><a href="#" className="text-black hover:text-brand-orange transition-colors duration-300 block">Parramatta</a></li>
+            <li><a href="#" className="text-black hover:text-brand-orange transition-colors duration-300 block">Western Sydney</a></li>
             <li><a href="#" className="text-black hover:text-brand-orange transition-colors duration-300 block">Northern Beaches</a></li>
             <li><a href="#" className="text-black hover:text-brand-orange transition-colors duration-300 block">Sydney Airport</a></li>
-            <li><a href="#" className="text-black hover:text-brand-orange transition-colors duration-300 block">ASydney CBD</a></li>
-            <li><a href="#" className="text-black hover:text-brand-orange transition-colors duration-300 block">Parramatta</a></li>
           </ul>
         </div>
 

@@ -63,7 +63,7 @@ export const VehicleCards = () => {
               <div className="w-full mb-2 flex justify-between items-start">
                 <div className="flex-1">
                   <h3 className={`text-[14px] font-bold text-center ${selectedCard === index ? 'text-white' : 'text-gray-900'}`}>{vehicle.name}</h3>
-                  <p className={`text-[11px] text-center ${selectedCard === index ? 'text-white' : 'text-gray-500'}`}>{vehicle.passengers}</p>
+                  <p className={`text-[11px] text-center whitespace-nowrap ${selectedCard === index ? 'text-white' : 'text-gray-500'}`}>{vehicle.passengers}</p>
                 </div>
                 <button className="transition-colors flex-shrink-0 ml-1">
                   <svg
@@ -169,8 +169,8 @@ export const VehicleCards = () => {
           <h2 className={`text-[32px] md:text-[48px] font-bold text-center text-gray-900 mb-2 ${adlamDisplay.className}`}>
             We’re Australia’s Taxi Company
           </h2>
-          <p className="text-center text-gray-600 text-base md:text-lg mb-8 md:mb-12 max-w-3xl mx-auto">
-            Taxi2Go provides reliable taxi services across Sydney with professional local drivers, transparent pricing, and no surge charges. Whether it’s a short city ride or a longer trip, we make taxi booking simple and dependable.        </p>
+          <p className="text-center px-[15px] text-gray-600 text-base md:text-lg mb-8 md:mb-12 max-w-3xl mx-auto">
+            Taxi2Go provides reliable taxi services across Sydney with professional local drivers, transparent pricing, and no surge charges.         </p>
         </div>
       </section>
     </section>

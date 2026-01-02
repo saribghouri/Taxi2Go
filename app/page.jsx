@@ -8,6 +8,9 @@ import { Testimonials } from "../components/Testimonials";
 import { PaymentMethods } from "../components/PaymentMethods";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
+import { BrandPositioning } from "../components/BrandPositioning";
+import { FinalCTA } from "../components/FinalCTA";
+import { MobileBottomBar } from "../components/MobileBottomBar";
 import { Menu, Search, X, Facebook, Instagram, Youtube, Linkedin } from "lucide-react";
 import Image from "next/image";
 
@@ -160,12 +163,17 @@ export default function Home() {
       <main>
         <Hero />
         <VehicleCards />
+        <BrandPositioning />
         <Features />
         <Testimonials />
+        <FinalCTA />
         {/* <PaymentMethods /> */}
       </main>
 
       <Footer />
+      
+      {/* Mobile Bottom Bar - Fixed */}
+      <MobileBottomBar />
     </div>
   );
 }

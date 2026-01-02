@@ -128,7 +128,7 @@ export const BookingForm = () => {
             value={form.pickup}
             onChange={handleChange}
             onFocus={() => setActiveLocationField("pickup")}
-            placeholder="Search pickup location (All Australia cities)"
+            placeholder="Enter pickup location (Sydney & nearby)"
             className="w-full bg-white rounded-full pl-11 md:pl-12 pr-4 py-3 md:py-3.5 text-[14px] md:text-base text-gray-700 placeholder:text-gray-400 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors"
           />
           {activeLocationField === "pickup" && filteredLocations.length > 0 && (
@@ -161,7 +161,7 @@ export const BookingForm = () => {
             value={form.dropoff}
             onChange={handleChange}
             onFocus={() => setActiveLocationField("dropoff")}
-            placeholder="Search dropoff location"
+            placeholder="Enter destination"
             className="w-full bg-white rounded-full pl-11 md:pl-12 pr-4 py-3 md:py-3.5 text-[14px] md:text-base text-gray-700 placeholder:text-gray-400 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors"
           />
           {activeLocationField === "dropoff" && filteredLocations.length > 0 && (
@@ -267,7 +267,7 @@ export const BookingForm = () => {
         onClick={() => setStep(2)}
         type="button"
       >
-        Next
+Book Taxi Now
       </button>
     </>
   )
@@ -484,11 +484,12 @@ export const BookingForm = () => {
     <div className="w-full max-w-[435px] md:max-w-[480px] h-auto bg-white/70 backdrop-blur-[1px] rounded-[40px] p-7 md:p-8 shadow-2xl">
       <div className=" mb-6">
         <h2 className={`text-3xl md:text-4xl font-bold text-gray-900 mb-2  ${adlamDisplay.className}`}>
-          Book a Taxi in Sydney in Seconds.
+          Book a Taxi in Sydney in Seconds
         </h2>
-        <p className="text-lg md:text-lg text-gray-800">
+        <p className="text-lg md:text-lg text-gray-800 mb-2">
           Fixed price rides with licensed Sydney taxis. No surge pricing. No delays.
         </p>
+    
       </div>
 
       {step === 1 && Step1}
@@ -517,6 +518,11 @@ export const BookingForm = () => {
           <div className="text-xs md:text-sm text-black font-medium">Rating</div>
         </div>
       </div>
+
+      {/* Trust Line */}
+      <p className="text-xs text-gray-600 text-center mt-4">
+        Trusted by 50,000+ riders · 4.9★ average rating
+      </p>
     </div>
   )
 }

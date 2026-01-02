@@ -77,7 +77,7 @@ const listItemVariants = {
         {/* Description */}
         <p className="text-lg text-[#3f3f3f] max-w-xl mx-auto lg:mx-0">
           Track your ride live with GPS, travel with licensed drivers, and arrive safely with a trusted Sydney taxi
-          service. Your safety is our priority.
+          service.
         </p>
 
         {/* Features List */}

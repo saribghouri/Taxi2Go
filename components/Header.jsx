@@ -38,10 +38,14 @@ export const Header = () => {
           </nav>
 <div className=" flex justify-between items-center gap-[60px]">
 
-    <div><h1 className=" font-bold  text-sm md:text-base lg:text-lg xl:text-[20px]  transition-colors">+92 3101745953</h1></div>
+    <div>
+      <a href="tel:0424106797" className="font-bold text-sm md:text-base lg:text-lg xl:text-[20px] text-black hover:text-[#FF6347] transition-colors cursor-pointer">
+        0424106797
+      </a>
+    </div>
           <div className="mt-[11px]">
       <a
-        href="tel:139350"
+        href="tel:0424106797"
         className="flex items-center gap-1.5 md:gap-2 hover:bg-white/20 rounded-full px-3 sm:px-4 md:px-5 lg:px-6 py-1.5 md:py-2 text-white bg-[#FF6347] hover:bg-[#e54d2e] font-bold transition-colors animate-bounce"
         style={{
           animation: "bounce 1s infinite",
