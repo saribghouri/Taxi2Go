@@ -22,7 +22,7 @@ export const BrandPositioning = () => {
           {/* Description */}
           <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
             Taxi2Go provides reliable taxi services across Sydney with professional local drivers, transparent 
-            pricing, and no surge charges. Whether it's a short city ride or a longer trip, we make taxi booking 
+            pricing, and no surge charges. we make taxi booking 
             simple and dependable.
           </p>
         </div>
