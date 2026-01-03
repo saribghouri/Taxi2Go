@@ -2,7 +2,7 @@ import { BookingForm } from "./BookingForm"
 
 export const Hero = () => {
   return (
-    <section className="relative w-full min-h-screen overflow-hidden">
+    <section id="hero" className="relative w-full min-h-screen overflow-hidden">
       {/* Background Image */}
      <div className="absolute inset-0 z-0 bg-hero">
 

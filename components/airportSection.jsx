@@ -43,7 +43,14 @@ export function AirportSection() {
 
             {/* CTA Button */}
             <div className="pt-6">
-              <button className="px-8 py-4 bg-[#FC5E39] hover:bg-[#e04e2b] text-white font-bold rounded-lg transition-colors text-lg shadow-md">
+              <button 
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="px-8 py-4 bg-[#FC5E39] hover:bg-[#e04e2b] text-white font-bold rounded-lg transition-colors text-lg shadow-md"
+              >
                 Book Airport Taxi
               </button>
             </div>

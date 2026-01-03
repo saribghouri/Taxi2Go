@@ -44,7 +44,14 @@ export function SafetySection() {
 
         {/* CTA Button */}
         <div className="pt-4">
-          <button className="px-8 py-4 bg-[#FC5E39] hover:[#FC5E39] text-white font-bold rounded-lg transition-colors text-lg">
+          <button 
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+            className="px-8 py-4 bg-[#FC5E39] hover:[#FC5E39] text-white font-bold rounded-lg transition-colors text-lg"
+          >
             Book Now
           </button>
         </div>
