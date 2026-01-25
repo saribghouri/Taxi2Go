@@ -657,7 +657,7 @@ export const BookingForm = () => {
                 <span className="font-bold text-[#FC5E39]">
                   ${(() => {
                     const selectedVehicle = fareData.vehicles?.find(v => v.vehicleType === form.vehicle)
-                    return (selectedVehicle?.total_fare || 0).toFixed(2)
+                    return (selectedVehicle?.totalFare || 0).toFixed(2)
                   })()}
                 </span>
               </div>
