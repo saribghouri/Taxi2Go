@@ -79,7 +79,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"pickup\": \"Sydney Airport, NSW, Australia\",\n  \"dropoff\": \"Circular Quay, Sydney NSW, Australia\",\n  \"pickupTime\": \"2026-01-26T10:00:00.000Z\",\n  \"vehicleType\": \"Sedan\",\n  \"childSeat\": false,\n  \"wheelchair\": false,\n  \"specialRequirements\": \"Please call upon arrival\",\n  \"passengerName\": \"John Doe\",\n  \"passengerPhone\": \"+61412345678\",\n  \"passengerEmail\": \"john.doe@example.com\",\n  \"paymentMethod\": \"card\"\n}"
+              "raw": "{\n  \"pickup\": \"Sydney Airport, NSW, Australia\",\n  \"pickupLat\": -33.9461,\n  \"pickupLng\": 151.1772,\n  \"dropoff\": \"Circular Quay, Sydney NSW, Australia\",\n  \"dropoffLat\": -33.8614,\n  \"dropoffLng\": 151.2108,\n  \"pickupTime\": \"2026-01-26T10:00:00.000Z\",\n  \"vehicleType\": \"Sedan\",\n  \"childSeat\": false,\n  \"wheelchair\": false,\n  \"specialRequirements\": \"Please call upon arrival\",\n  \"passengerName\": \"John Doe\",\n  \"passengerPhone\": \"+61412345678\",\n  \"passengerEmail\": \"john.doe@example.com\",\n  \"paymentMethod\": \"card\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/booking/create",
@@ -100,7 +100,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"pickup\": \"Bondi Beach, Sydney NSW\",\n  \"dropoff\": \"Sydney Opera House, Sydney NSW\",\n  \"pickupTime\": \"2026-01-26T14:00:00.000Z\",\n  \"vehicleType\": \"SUV\",\n  \"childSeat\": true,\n  \"wheelchair\": false,\n  \"passengerName\": \"Jane Smith\",\n  \"passengerPhone\": \"+61423456789\",\n  \"passengerEmail\": \"jane.smith@example.com\",\n  \"paymentMethod\": \"cash\"\n}"
+              "raw": "{\n  \"pickup\": \"Bondi Beach, Sydney NSW\",\n  \"pickupLat\": -33.8915,\n  \"pickupLng\": 151.2767,\n  \"dropoff\": \"Sydney Opera House, Sydney NSW\",\n  \"dropoffLat\": -33.8568,\n  \"dropoffLng\": 151.2153,\n  \"pickupTime\": \"2026-01-26T14:00:00.000Z\",\n  \"vehicleType\": \"SUV\",\n  \"childSeat\": true,\n  \"wheelchair\": false,\n  \"passengerName\": \"Jane Smith\",\n  \"passengerPhone\": \"+61423456789\",\n  \"passengerEmail\": \"jane.smith@example.com\",\n  \"paymentMethod\": \"cash\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/booking/create",

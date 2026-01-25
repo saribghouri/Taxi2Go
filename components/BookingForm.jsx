@@ -34,7 +34,11 @@ export const BookingForm = () => {
   // Form state
   const [form, setForm] = useState({
     pickup: "",
+    pickupLat: null,
+    pickupLng: null,
     dropoff: "",
+    dropoffLat: null,
+    dropoffLng: null,
     vehicle: "",
     childSeat: false,
     wheelchair: false,
@@ -163,8 +167,13 @@ export const BookingForm = () => {
   const onPickupPlaceChanged = () => {
     if (pickupAutocompleteRef.current !== null) {
       const place = pickupAutocompleteRef.current.getPlace()
-      if (place.formatted_address) {
-        setForm(prev => ({ ...prev, pickup: place.formatted_address }))
+      if (place.formatted_address && place.geometry) {
+        setForm(prev => ({ 
+          ...prev, 
+          pickup: place.formatted_address,
+          pickupLat: place.geometry.location.lat(),
+          pickupLng: place.geometry.location.lng()
+        }))
         setFareData(null) // Reset fare data
       }
     }
@@ -177,8 +186,13 @@ export const BookingForm = () => {
   const onDropoffPlaceChanged = () => {
     if (dropoffAutocompleteRef.current !== null) {
       const place = dropoffAutocompleteRef.current.getPlace()
-      if (place.formatted_address) {
-        setForm(prev => ({ ...prev, dropoff: place.formatted_address }))
+      if (place.formatted_address && place.geometry) {
+        setForm(prev => ({ 
+          ...prev, 
+          dropoff: place.formatted_address,
+          dropoffLat: place.geometry.location.lat(),
+          dropoffLng: place.geometry.location.lng()
+        }))
         setFareData(null) // Reset fare data
       }
     }
@@ -208,7 +222,11 @@ export const BookingForm = () => {
     try {
       const bookingData = {
         pickup: form.pickup,
+        pickupLat: form.pickupLat,
+        pickupLng: form.pickupLng,
         dropoff: form.dropoff,
+        dropoffLat: form.dropoffLat,
+        dropoffLng: form.dropoffLng,
         pickupTime: formatPickupTime(),
         vehicleType: form.vehicle,
         childSeat: form.childSeat,
@@ -600,7 +618,7 @@ export const BookingForm = () => {
           ) : (
             (() => {
               const selectedVehicle = fareData?.vehicles?.find(v => v.vehicleType === form.vehicle)
-              const totalFare = selectedVehicle?.total_fare || 0
+              const totalFare = selectedVehicle?.totalFare || 0
               return `Book Now - $${totalFare.toFixed(2)}`
             })()
           )}
@@ -651,7 +669,11 @@ export const BookingForm = () => {
               setStep(1)
               setForm({
                 pickup: "",
+                pickupLat: null,
+                pickupLng: null,
                 dropoff: "",
+                dropoffLat: null,
+                dropoffLng: null,
                 vehicle: "",
                 childSeat: false,
                 wheelchair: false,
