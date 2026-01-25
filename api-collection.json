@@ -1,0 +1,240 @@
+{
+  "info": {
+    "name": "Taxi2Go Backend API",
+    "description": "Complete API collection for testing Taxi2Go backend endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Fare",
+      "item": [
+        {
+          "name": "Calculate Fare - All Vehicles",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup\": \"Sydney Airport, NSW, Australia\",\n  \"dropoff\": \"Circular Quay, Sydney NSW, Australia\",\n  \"childSeat\": true,\n  \"wheelchair\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/fare/calculate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "fare", "calculate"]
+            }
+          }
+        },
+        {
+          "name": "Calculate Fare - Single Vehicle",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup\": \"Sydney Airport, NSW, Australia\",\n  \"dropoff\": \"Circular Quay, Sydney NSW, Australia\",\n  \"vehicleType\": \"Sedan\",\n  \"childSeat\": true,\n  \"wheelchair\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/fare/calculate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "fare", "calculate"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Booking",
+      "item": [
+        {
+          "name": "Create Booking (Card)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup\": \"Sydney Airport, NSW, Australia\",\n  \"dropoff\": \"Circular Quay, Sydney NSW, Australia\",\n  \"pickupTime\": \"2026-01-26T10:00:00.000Z\",\n  \"vehicleType\": \"Sedan\",\n  \"childSeat\": false,\n  \"wheelchair\": false,\n  \"specialRequirements\": \"Please call upon arrival\",\n  \"passengerName\": \"John Doe\",\n  \"passengerPhone\": \"+61412345678\",\n  \"passengerEmail\": \"john.doe@example.com\",\n  \"paymentMethod\": \"card\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/booking/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "booking", "create"]
+            }
+          }
+        },
+        {
+          "name": "Create Booking (Cash)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup\": \"Bondi Beach, Sydney NSW\",\n  \"dropoff\": \"Sydney Opera House, Sydney NSW\",\n  \"pickupTime\": \"2026-01-26T14:00:00.000Z\",\n  \"vehicleType\": \"SUV\",\n  \"childSeat\": true,\n  \"wheelchair\": false,\n  \"passengerName\": \"Jane Smith\",\n  \"passengerPhone\": \"+61423456789\",\n  \"passengerEmail\": \"jane.smith@example.com\",\n  \"paymentMethod\": \"cash\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/booking/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "booking", "create"]
+            }
+          }
+        },
+        {
+          "name": "Get Booking by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/booking/:bookingId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "booking", ":bookingId"],
+              "variable": [
+                {
+                  "key": "bookingId",
+                  "value": "replace-with-actual-booking-id"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Get All Bookings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/bookings?limit=10&page=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "bookings"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "status",
+                  "value": "Confirmed",
+                  "disabled": true
+                },
+                {
+                  "key": "paymentStatus",
+                  "value": "Paid",
+                  "disabled": true
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Booking by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/bookings/:bookingId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "bookings", ":bookingId"],
+              "variable": [
+                {
+                  "key": "bookingId",
+                  "value": "replace-with-actual-booking-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "settings"]
+            }
+          }
+        },
+        {
+          "name": "Update Settings",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"farePerKm\": 3.00,\n  \"airportSurcharge\": 6.00,\n  \"childSeatPrice\": 12.00,\n  \"wheelchairPrice\": 18.00,\n  \"adminPhone\": \"+61400000000\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "settings"]
+            }
+          }
+        },
+        {
+          "name": "Get Statistics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "stats"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ]
+}
