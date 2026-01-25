@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react"
 import { MapPin, Car, ChevronDown, Users, CheckCircle, Loader2, RockingChair, Baby } from "lucide-react"
 import Image from "next/image"
 import { ADLaM_Display } from 'next/font/google'
-import { LoadScript, Autocomplete } from '@react-google-maps/api'
+import { LoadScript, Autocomplete, GoogleMap, DirectionsRenderer } from '@react-google-maps/api'
 import { VehicleType, VehicleDisplayNames, VehicleDescriptions } from '../utils/enums'
 
 const adlamDisplay = ADLaM_Display({
@@ -14,7 +14,18 @@ const adlamDisplay = ADLaM_Display({
 
 const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000'
-const GOOGLE_MAPS_LIBRARIES = ['places']
+const GOOGLE_MAPS_LIBRARIES = ['places', 'geometry']
+
+// Map container style - compact for viewport
+const mapContainerStyle = {
+  width: '100%',
+  height: '100%'
+}
+
+const defaultCenter = {
+  lat: -33.8688,
+  lng: 151.2093 // Sydney
+}
 
 export const BookingForm = () => {
   const [step, setStep] = useState(1)
@@ -47,6 +58,10 @@ export const BookingForm = () => {
   // Google Maps Autocomplete refs
   const pickupAutocompleteRef = useRef(null)
   const dropoffAutocompleteRef = useRef(null)
+  
+  // Map and directions state
+  const [directionsResponse, setDirectionsResponse] = useState(null)
+  const [map, setMap] = useState(null)
 
   // Calculate fare when both pickup and dropoff are filled
   useEffect(() => {
@@ -99,6 +114,34 @@ export const BookingForm = () => {
       setIsCalculatingFare(false)
     }
   }
+
+  const calculateRoute = async () => {
+    if (!form.pickup || !form.dropoff || !window.google) return
+    
+    try {
+      const directionsService = new window.google.maps.DirectionsService()
+      const results = await directionsService.route({
+        origin: form.pickup,
+        destination: form.dropoff,
+        travelMode: window.google.maps.TravelMode.DRIVING,
+        provideRouteAlternatives: false,
+        avoidTolls: false // Show toll roads
+      })
+      setDirectionsResponse(results)
+    } catch (error) {
+      console.error('Error calculating route:', error)
+      setDirectionsResponse(null)
+    }
+  }
+
+  // Calculate route when locations change
+  useEffect(() => {
+    if (form.pickup && form.dropoff) {
+      calculateRoute()
+    } else {
+      setDirectionsResponse(null)
+    }
+  }, [form.pickup, form.dropoff])
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -232,7 +275,7 @@ export const BookingForm = () => {
   }
 
   const Step1 = (
-    <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={GOOGLE_MAPS_LIBRARIES}>
+    <>
       <div className="space-y-3 mb-4">
         {/* Pickup Location */}
         <div className="relative">
@@ -460,9 +503,9 @@ export const BookingForm = () => {
         disabled={!form.pickup || !form.dropoff || !form.vehicle || isCalculatingFare}
         type="button"
       >
-        Book Taxi Now
+        Continue to Booking
       </button>
-    </LoadScript>
+    </>
   )
 
   const Step2 = (
@@ -634,42 +677,79 @@ export const BookingForm = () => {
   }
 
   return (
-    <div id="booking-form" className="w-full max-w-[435px] md:max-w-[480px] bg-white/70 backdrop-blur-[1px] rounded-[40px] p-5 md:p-6 shadow-2xl">
-      <div className="mb-4">
-        <h2 className={`text-2xl md:text-3xl font-bold text-gray-900 mb-1 ${adlamDisplay.className}`}>
-          Book a Taxi in Sydney
-        </h2>
-        <p className="text-base md:text-lg text-gray-800 mb-2">
-          Fixed price rides. No surge pricing.
-        </p>
-      </div>
-
-      {step === 1 && Step1}
-      {step === 2 && Step2}
-
-      <div className="flex items-center justify-center gap-6 md:gap-8 pt-2">
-        <div className="flex flex-col items-center">
-          <div className="flex items-center gap-1 mb-1">
-            <Image src="/assets/images/fluent-color_people-48.png" alt="People" width={35} height={35} className="md:w-[40px] md:h-[40px]" />
+    <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={GOOGLE_MAPS_LIBRARIES}>
+      <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-4 items-start">
+        {/* Map Preview - Shows when locations are entered */}
+        {form.pickup && form.dropoff && (
+          <div className="w-full lg:w-[45%] bg-white rounded-3xl overflow-hidden shadow-2xl h-[300px] lg:h-[500px] lg:sticky lg:top-24">
+            <GoogleMap
+              mapContainerStyle={mapContainerStyle}
+              center={defaultCenter}
+              zoom={12}
+              onLoad={(map) => setMap(map)}
+              options={{
+                zoomControl: true,
+                streetViewControl: false,
+                mapTypeControl: false,
+                fullscreenControl: false,
+              }}
+            >
+              {directionsResponse && (
+                <DirectionsRenderer
+                  directions={directionsResponse}
+                  options={{
+                    suppressMarkers: false,
+                    polylineOptions: {
+                      strokeColor: '#FC5E39',
+                      strokeWeight: 5,
+                      strokeOpacity: 0.8,
+                    },
+                  }}
+                />
+              )}
+            </GoogleMap>
           </div>
-          <div className="text-lg md:text-xl font-bold text-black">50,408</div>
-          <div className="text-xs text-black font-medium">Happy Rides</div>
-        </div>
+        )}
 
-        <div className="w-px h-12 md:h-14 bg-gray-300"></div>
-
-        <div className="flex flex-col items-center">
-          <div className="flex items-center gap-0.5 mb-1">
-            <Image src="/assets/images/Group.png" alt="Rating Stars" width={50} height={25} className="md:w-[55px] md:h-[28px]" />
+        {/* Booking Form */}
+        <div className={`w-full ${form.pickup && form.dropoff ? 'lg:w-[55%]' : 'lg:w-full max-w-[480px]'} bg-white/70 backdrop-blur-[1px] rounded-[40px] p-4 md:p-5 shadow-2xl`}>
+          <div className="mb-3">
+            <h2 className={`text-xl md:text-2xl font-bold text-gray-900 mb-1 ${adlamDisplay.className}`}>
+              Book a Taxi in Sydney
+            </h2>
+            <p className="text-sm md:text-base text-gray-800">
+              Fixed price rides. No surge pricing.
+            </p>
           </div>
-          <div className="text-lg md:text-xl font-bold text-black">4.9/5</div>
-          <div className="text-xs text-black font-medium">Rating</div>
+
+          {step === 1 && Step1}
+          {step === 2 && Step2}
+
+          <div className="flex items-center justify-center gap-4 md:gap-6 pt-2">
+            <div className="flex flex-col items-center">
+              <div className="flex items-center gap-1 mb-1">
+                <Image src="/assets/images/fluent-color_people-48.png" alt="People" width={30} height={30} className="md:w-[35px] md:h-[35px]" />
+              </div>
+              <div className="text-base md:text-lg font-bold text-black">50,408</div>
+              <div className="text-xs text-black font-medium">Happy Rides</div>
+            </div>
+
+            <div className="w-px h-10 md:h-12 bg-gray-300"></div>
+
+            <div className="flex flex-col items-center">
+              <div className="flex items-center gap-0.5 mb-1">
+                <Image src="/assets/images/Group.png" alt="Rating Stars" width={45} height={22} className="md:w-[50px] md:h-[25px]" />
+              </div>
+              <div className="text-base md:text-lg font-bold text-black">4.9/5</div>
+              <div className="text-xs text-black font-medium">Rating</div>
+            </div>
+          </div>
+
+          <p className="text-xs text-gray-600 text-center mt-2">
+            Trusted by 50,000+ riders · 4.9★ average
+          </p>
         </div>
       </div>
-
-      <p className="text-xs text-gray-600 text-center mt-3">
-        Trusted by 50,000+ riders · 4.9★ average
-      </p>
-    </div>
+    </LoadScript>
   )
 }
