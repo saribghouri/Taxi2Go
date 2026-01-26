@@ -18,6 +18,83 @@
       }
     },
     {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.token) {",
+                  "        pm.environment.set('authToken', response.token);",
+                  "        console.log('Token saved:', response.token);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@taxi2go.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "Fare",
       "item": [
         {
@@ -175,10 +252,185 @@
       "name": "Admin",
       "item": [
         {
+          "name": "Get All Companies",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/companies",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "companies"]
+            }
+          }
+        },
+        {
+          "name": "Get Company Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/companies/:companyId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "companies", ":companyId"],
+              "variable": [
+                {
+                  "key": "companyId",
+                  "value": "replace-with-company-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Company Bookings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/companies/:companyId/bookings?limit=10&page=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "companies", ":companyId", "bookings"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "status",
+                  "value": "Confirmed",
+                  "disabled": true
+                },
+                {
+                  "key": "paymentStatus",
+                  "value": "Paid",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "companyId",
+                  "value": "replace-with-company-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Company Passengers",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/companies/:companyId/passengers?limit=10&page=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "companies", ":companyId", "passengers"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "companyId",
+                  "value": "replace-with-company-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Company Settings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/companies/:companyId/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "companies", ":companyId", "settings"],
+              "variable": [
+                {
+                  "key": "companyId",
+                  "value": "replace-with-company-id"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Company Settings",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"farePerKm\": 3.00,\n  \"airportSurcharge\": 6.00,\n  \"childSeatPrice\": 12.00,\n  \"wheelchairPrice\": 18.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/companies/:companyId/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "companies", ":companyId", "settings"],
+              "variable": [
+                {
+                  "key": "companyId",
+                  "value": "replace-with-company-id"
+                }
+              ]
+            }
+          }
+        },
+        {
           "name": "Get All Bookings",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/admin/bookings?limit=10&page=1",
               "host": ["{{baseUrl}}"],
@@ -210,7 +462,12 @@
           "name": "Get Booking by ID",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/admin/bookings/:bookingId",
               "host": ["{{baseUrl}}"],
@@ -228,7 +485,12 @@
           "name": "Get Settings",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/admin/settings",
               "host": ["{{baseUrl}}"],
@@ -241,6 +503,10 @@
           "request": {
             "method": "PUT",
             "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
               {
                 "key": "Content-Type",
                 "value": "application/json"
@@ -261,7 +527,12 @@
           "name": "Get Statistics",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/admin/stats",
               "host": ["{{baseUrl}}"],
