@@ -62,7 +62,7 @@ export const BookingForm = () => {
   // Google Maps Autocomplete refs
   const pickupAutocompleteRef = useRef(null)
   const dropoffAutocompleteRef = useRef(null)
-  
+
   // Map and directions state
   const [directionsResponse, setDirectionsResponse] = useState(null)
   const [map, setMap] = useState(null)
@@ -121,7 +121,7 @@ export const BookingForm = () => {
 
   const calculateRoute = async () => {
     if (!form.pickup || !form.dropoff || !window.google) return
-    
+
     try {
       const directionsService = new window.google.maps.DirectionsService()
       const results = await directionsService.route({
@@ -168,8 +168,8 @@ export const BookingForm = () => {
     if (pickupAutocompleteRef.current !== null) {
       const place = pickupAutocompleteRef.current.getPlace()
       if (place.formatted_address && place.geometry) {
-        setForm(prev => ({ 
-          ...prev, 
+        setForm(prev => ({
+          ...prev,
           pickup: place.formatted_address,
           pickupLat: place.geometry.location.lat(),
           pickupLng: place.geometry.location.lng()
@@ -187,8 +187,8 @@ export const BookingForm = () => {
     if (dropoffAutocompleteRef.current !== null) {
       const place = dropoffAutocompleteRef.current.getPlace()
       if (place.formatted_address && place.geometry) {
-        setForm(prev => ({ 
-          ...prev, 
+        setForm(prev => ({
+          ...prev,
           dropoff: place.formatted_address,
           dropoffLat: place.geometry.location.lat(),
           dropoffLng: place.geometry.location.lng()
@@ -250,7 +250,7 @@ export const BookingForm = () => {
         throw new Error('Failed to create booking')
       }
 
-      const data = await response.json()
+      const { data } = await response.json()
 
       // If card payment, redirect to Stripe
       if (form.payment === 'card' && data.checkoutUrl) {
@@ -413,8 +413,8 @@ export const BookingForm = () => {
                         type="button"
                         onClick={() => selectVehicle(vehicle.vehicleType)}
                         className={`w-full flex items-center p-3 rounded-2xl transition-all border-2 ${form.vehicle === vehicle.vehicleType
-                            ? 'bg-orange-100 border-[#FC5E39]'
-                            : 'bg-white border-orange-300/50 hover:border-[#FF6347]'
+                          ? 'bg-orange-100 border-[#FC5E39]'
+                          : 'bg-white border-orange-300/50 hover:border-[#FF6347]'
                           }`}
                       >
                         <div className="w-16 h-10 shrink-0 rounded-lg overflow-hidden mr-3">
