@@ -59,6 +59,14 @@ export const BookingForm = () => {
   const [isCreatingBooking, setIsCreatingBooking] = useState(false)
   const [error, setError] = useState(null)
 
+  // OTP states for cash payment
+  const [showOtpInput, setShowOtpInput] = useState(false)
+  const [otp, setOtp] = useState('')
+  const [bookingId, setBookingId] = useState(null)
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false)
+  const [resendTimer, setResendTimer] = useState(60)
+  const [canResend, setCanResend] = useState(false)
+
   // Google Maps Autocomplete refs
   const pickupAutocompleteRef = useRef(null)
   const dropoffAutocompleteRef = useRef(null)
@@ -73,6 +81,23 @@ export const BookingForm = () => {
       calculateFare()
     }
   }, [form.pickup, form.dropoff, form.childSeat, form.wheelchair])
+
+  // Timer for resend OTP (1 minute)
+  useEffect(() => {
+    let interval
+    if (showOtpInput && resendTimer > 0) {
+      interval = setInterval(() => {
+        setResendTimer((prev) => {
+          if (prev <= 1) {
+            setCanResend(true)
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+    }
+    return () => clearInterval(interval)
+  }, [showOtpInput, resendTimer])
 
   const calculateFare = async () => {
     setIsCalculatingFare(true)
@@ -256,14 +281,83 @@ export const BookingForm = () => {
       if (form.payment === 'card' && data.checkoutUrl) {
         window.location.href = data.checkoutUrl
       } else {
-        // Cash payment confirmed
-        setIsBooked(true)
+        // Cash payment - OTP sent, show OTP input
+        setBookingId(data.bookingId || data.id)
+        setShowOtpInput(true)
       }
     } catch (err) {
       setError(err.message || 'Failed to create booking. Please try again.')
       console.error('Booking creation error:', err)
     } finally {
       setIsCreatingBooking(false)
+    }
+  }
+
+  const verifyOtp = async () => {
+    if (!otp || otp.length !== 6) {
+      setError('Please enter a valid 6-digit OTP')
+      return
+    }
+
+    setIsVerifyingOtp(true)
+    setError(null)
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/booking/verify-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          bookingId: bookingId,
+          otp: otp,
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.message || 'Invalid OTP')
+      }
+
+      const data = await response.json()
+      
+      // OTP verified successfully, redirect to success page with booking ID
+      window.location.href = `/booking/success?booking_id=${bookingId}`
+    } catch (err) {
+      setError(err.message || 'Failed to verify OTP. Please try again.')
+      console.error('OTP verification error:', err)
+    } finally {
+      setIsVerifyingOtp(false)
+    }
+  }
+
+  const resendOtp = async () => {
+    setError(null)
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/booking/resend-otp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          bookingId: bookingId,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to resend OTP')
+      }
+
+      // Reset timer and disable resend button
+      setOtp('')
+      setResendTimer(60)
+      setCanResend(false)
+      setError('OTP resent successfully!')
+      setTimeout(() => setError(null), 3000)
+    } catch (err) {
+      setError(err.message || 'Failed to resend OTP. Please try again.')
+      console.error('Resend OTP error:', err)
     }
   }
 
@@ -526,6 +620,89 @@ export const BookingForm = () => {
     </>
   )
 
+  // OTP Input Screen - Replaces Step 2 when OTP is sent
+  const OtpScreen = (
+    <div className="space-y-4">
+      <div className="text-center mb-6">
+        <div className="w-20 h-20 bg-[#FC5E39]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+          <span className="text-4xl">📱</span>
+        </div>
+        <h3 className="text-2xl font-bold text-gray-900 mb-2">Verify Your Booking</h3>
+        <p className="text-sm text-gray-600">
+          We've sent a 6-digit OTP to
+        </p>
+        <p className="text-base font-semibold text-[#FC5E39] mt-1">{form.phone}</p>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2 text-center">
+          Enter OTP Code
+        </label>
+        <input
+          type="text"
+          maxLength="6"
+          value={otp}
+          onChange={(e) => {
+            const value = e.target.value.replace(/[^0-9]/g, '')
+            setOtp(value)
+          }}
+          placeholder="000000"
+          className="w-full px-4 py-4 text-center text-3xl font-bold tracking-widest border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-[#FC5E39] focus:ring-2 focus:ring-[#FC5E39]/20 transition-all"
+          disabled={isVerifyingOtp}
+          autoFocus
+        />
+      </div>
+
+      <button
+        className="w-full bg-[#FC5E39] hover:bg-[#e54d2e] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-full py-4 text-base transition-colors shadow-lg flex items-center justify-center gap-2"
+        onClick={verifyOtp}
+        disabled={isVerifyingOtp || otp.length !== 6}
+        type="button"
+      >
+        {isVerifyingOtp ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            Verifying...
+          </>
+        ) : (
+          'Verify & Confirm Booking'
+        )}
+      </button>
+
+      <div className="text-center">
+        {canResend ? (
+          <button
+            className="text-[#FC5E39] hover:text-[#e54d2e] font-semibold text-sm transition-colors"
+            onClick={resendOtp}
+            type="button"
+          >
+            Didn't receive OTP? Resend
+          </button>
+        ) : (
+          <p className="text-gray-500 text-sm">
+            Resend OTP in <span className="font-semibold text-[#FC5E39]">{resendTimer}s</span>
+          </p>
+        )}
+      </div>
+
+      <button
+        className="w-full text-gray-600 hover:text-gray-800 font-medium text-sm py-2 transition-colors"
+        onClick={() => {
+          setShowOtpInput(false)
+          setOtp('')
+          setBookingId(null)
+          setResendTimer(60)
+          setCanResend(false)
+          setError(null)
+        }}
+        disabled={isVerifyingOtp}
+        type="button"
+      >
+        ← Change Phone Number
+      </button>
+    </div>
+  )
+
   const Step2 = (
     <>
       <div className="space-y-3 mb-4">
@@ -745,7 +922,8 @@ export const BookingForm = () => {
           </div>
 
           {step === 1 && Step1}
-          {step === 2 && Step2}
+          {step === 2 && !showOtpInput && Step2}
+          {step === 2 && showOtpInput && OtpScreen}
 
           <div className="flex items-center justify-center gap-4 md:gap-6 pt-2">
             <div className="flex flex-col items-center">

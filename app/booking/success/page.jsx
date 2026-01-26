@@ -10,19 +10,20 @@ export default function BookingSuccess() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const sessionId = searchParams.get('session_id')
+  const bookingId = searchParams.get('booking_id')
   
   const [bookingDetails, setBookingDetails] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (sessionId) {
+    if (sessionId || bookingId) {
       verifyPayment()
     } else {
-      setError('No session ID found')
+      setError('No session or booking ID found')
       setLoading(false)
     }
-  }, [sessionId])
+  }, [sessionId, bookingId])
 
   const verifyPayment = async () => {
     try {
@@ -85,10 +86,11 @@ export default function BookingSuccess() {
             Booking Confirmed! 🎉
           </h1>
           <p className="text-lg text-gray-600 mb-2">
-            Your payment was successful and your taxi is on the way!
+            {sessionId ? 'Your payment was successful and your taxi is on the way!' : 'Your booking has been confirmed and your taxi is on the way!'}
           </p>
           <p className="text-sm text-gray-500">
-            Session ID: {sessionId?.substring(0, 20)}...
+            {sessionId && `Session ID: ${sessionId.substring(0, 20)}...`}
+            {bookingId && `Booking ID: ${bookingId}`}
           </p>
         </div>
 
@@ -118,9 +120,13 @@ export default function BookingSuccess() {
         <div className="bg-gray-50 rounded-2xl p-4 mb-6">
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <CreditCard className="w-4 h-4 text-green-600" />
-            <span className="font-semibold text-green-600">Payment Successful</span>
+            <span className="font-semibold text-green-600">
+              {sessionId ? 'Payment Successful' : 'Booking Confirmed'}
+            </span>
             <span className="mx-2">•</span>
-            <span>Your card has been charged</span>
+            <span>
+              {sessionId ? 'Your card has been charged' : 'Pay with cash to the driver'}
+            </span>
           </div>
         </div>
 
