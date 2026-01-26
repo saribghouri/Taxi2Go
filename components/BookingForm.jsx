@@ -54,10 +54,10 @@ export const BookingForm = () => {
 
   // API states
   const [fareData, setFareData] = useState(null)
-  console.log("🚀 ~ BookingForm ~ fareData:", fareData)
   const [isCalculatingFare, setIsCalculatingFare] = useState(false)
   const [isCreatingBooking, setIsCreatingBooking] = useState(false)
   const [error, setError] = useState(null)
+  const [isLocationOutsideSydney, setIsLocationOutsideSydney] = useState(false)
 
   // OTP states for cash payment
   const [showOtpInput, setShowOtpInput] = useState(false)
@@ -102,6 +102,7 @@ export const BookingForm = () => {
   const calculateFare = async () => {
     setIsCalculatingFare(true)
     setError(null)
+    setIsLocationOutsideSydney(false)
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/fare/calculate`, {
@@ -118,11 +119,22 @@ export const BookingForm = () => {
         }),
       })
 
-      if (!response.ok) {
-        throw new Error('Failed to calculate fare')
+      const data = await response.json()
+
+      // Check if location is outside Sydney
+      if (!response.ok || data.success === false) {
+        const errorMessage = data.message || 'Failed to calculate fare'
+        
+        // Check if error is about Sydney location
+        if (errorMessage.toLowerCase().includes('sydney')) {
+          setIsLocationOutsideSydney(true)
+          setError(errorMessage)
+        } else {
+          setError(errorMessage)
+        }
+        return
       }
 
-      const data = await response.json()
       // Expected response format:
       // {
       //   distance_km: number,
@@ -136,6 +148,7 @@ export const BookingForm = () => {
       //   ]
       // }
       setFareData(data.data)
+      setIsLocationOutsideSydney(false)
     } catch (err) {
       setError(err.message || 'Failed to calculate fare. Please try again.')
       console.error('Fare calculation error:', err)
@@ -182,6 +195,7 @@ export const BookingForm = () => {
     // Reset fare data when locations or options change
     if (name === 'pickup' || name === 'dropoff' || name === 'childSeat' || name === 'wheelchair') {
       setFareData(null)
+      setIsLocationOutsideSydney(false)
     }
   }
 
@@ -634,7 +648,7 @@ export const BookingForm = () => {
       <button
         className="w-full bg-[#FC5E39] hover:bg-[#e54d2e] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-base md:text-lg rounded-full py-3 md:py-3.5 transition-colors shadow-lg mb-3"
         onClick={handleStep1Submit}
-        disabled={!form.pickup || !form.dropoff || !form.vehicle || isCalculatingFare}
+        disabled={!form.pickup || !form.dropoff || !form.vehicle || isCalculatingFare || isLocationOutsideSydney || !fareData}
         type="button"
       >
         Continue to Booking
@@ -900,8 +914,8 @@ export const BookingForm = () => {
   return (
     <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={GOOGLE_MAPS_LIBRARIES}>
       <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-4 items-start">
-        {/* Map Preview - Shows when locations are entered */}
-        {form.pickup && form.dropoff && (
+        {/* Map Preview - Shows when BOTH locations are entered */}
+        {form.pickup && form.dropoff && form.pickupLat && form.dropoffLat && (
           <div className="w-full lg:w-[45%] bg-white rounded-3xl overflow-hidden shadow-2xl h-[300px] lg:h-[500px] lg:sticky lg:top-24">
             <GoogleMap
               mapContainerStyle={mapContainerStyle}
@@ -933,7 +947,7 @@ export const BookingForm = () => {
         )}
 
         {/* Booking Form */}
-        <div className={`w-full ${form.pickup && form.dropoff ? 'lg:w-[55%]' : 'lg:w-full max-w-[480px]'} bg-white/70 backdrop-blur-[1px] rounded-[40px] p-4 md:p-5 shadow-2xl`}>
+        <div className={`w-full ${form.pickup && form.dropoff && form.pickupLat && form.dropoffLat ? 'lg:w-[55%]' : 'lg:w-full max-w-[480px]'} bg-white/70 backdrop-blur-[1px] rounded-[40px] p-4 md:p-5 shadow-2xl`}>
           <div className="mb-3">
             <h2 className={`text-xl md:text-2xl font-bold text-gray-900 mb-1 ${adlamDisplay.className}`}>
               Book a Taxi in Sydney
