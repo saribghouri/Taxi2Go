@@ -399,7 +399,18 @@ export const BookingForm = () => {
             onPlaceChanged={onPickupPlaceChanged}
             options={{
               componentRestrictions: { country: 'au' },
-              types: ['address']
+              types: ['geocode'],
+              bounds: {
+                north: -33.578,
+                south: -34.118,
+                east: 151.343,
+                west: 150.521
+              },
+              strictBounds: true,
+              locationBias: {
+                center: { lat: -33.8688, lng: 151.2093 },
+                radius: 50000
+              }
             }}
           >
             <input
@@ -423,7 +434,18 @@ export const BookingForm = () => {
             onPlaceChanged={onDropoffPlaceChanged}
             options={{
               componentRestrictions: { country: 'au' },
-              types: ['address']
+              types: ['geocode'],
+              bounds: {
+                north: -33.578,
+                south: -34.118,
+                east: 151.343,
+                west: 150.521
+              },
+              strictBounds: true,
+              locationBias: {
+                center: { lat: -33.8688, lng: 151.2093 },
+                radius: 50000
+              }
             }}
           >
             <input
