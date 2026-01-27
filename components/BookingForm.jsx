@@ -75,10 +75,17 @@ export const BookingForm = () => {
   const [directionsResponse, setDirectionsResponse] = useState(null)
   const [map, setMap] = useState(null)
 
-  // Calculate fare when both pickup and dropoff are filled
+  // Calculate fare when both pickup and dropoff are filled (with debounce for manual typing)
   useEffect(() => {
-    if (form.pickup && form.dropoff && !fareData && !isCalculatingFare) {
-      calculateFare()
+    if (form.pickup && form.dropoff && form.pickup.length > 3 && form.dropoff.length > 3) {
+      // Debounce: wait 2 seconds after user stops typing
+      const timer = setTimeout(() => {
+        if (!isCalculatingFare) {
+          calculateFare()
+        }
+      }, 2000)
+
+      return () => clearTimeout(timer)
     }
   }, [form.pickup, form.dropoff, form.childSeat, form.wheelchair])
 
