@@ -363,6 +363,7 @@ export const BookingForm = () => {
         },
         body: JSON.stringify({
           bookingId: bookingId,
+          phone: form.phone, // Send current phone number to backend for validation
         }),
       })
 
@@ -714,13 +715,16 @@ export const BookingForm = () => {
 
       <div className="text-center">
         {canResend ? (
-          <button
-            className="text-[#FC5E39] hover:text-[#e54d2e] font-semibold text-sm transition-colors"
-            onClick={resendOtp}
-            type="button"
-          >
-            Didn't receive OTP? Resend
-          </button>
+          <p className="text-gray-600 text-sm">
+            Didn't receive OTP?{' '}
+            <button
+              className="text-gray-600 hover:text-[#FC5E39] font-semibold transition-colors cursor-pointer underline"
+              onClick={resendOtp}
+              type="button"
+            >
+              Resend
+            </button>
+          </p>
         ) : (
           <p className="text-gray-500 text-sm">
             Resend OTP in <span className="font-semibold text-[#FC5E39]">{resendTimer}s</span>
@@ -731,12 +735,14 @@ export const BookingForm = () => {
       <button
         className="w-full text-gray-600 hover:text-gray-800 font-medium text-sm py-2 transition-colors"
         onClick={() => {
+          // Reset OTP screen and allow user to change phone number
           setShowOtpInput(false)
           setOtp('')
-          setBookingId(null)
+          setBookingId(null) // Clear old booking ID so new booking is created
           setResendTimer(60)
           setCanResend(false)
           setError(null)
+          setIsCreatingBooking(false)
         }}
         disabled={isVerifyingOtp}
         type="button"
@@ -922,7 +928,7 @@ export const BookingForm = () => {
     <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={GOOGLE_MAPS_LIBRARIES}>
       <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-4 md:items-start items-center">
         {/* Booking Form */}
-        <div className={`w-full ${form.pickup && form.dropoff && form.pickupLat && form.dropoffLat ? 'lg:w-[55%]' : 'lg:w-full max-w-[480px]'} bg-white/70 backdrop-blur-[1px] sm:rounded-[40px] rounded-3xl p-3 md:p-5 shadow-2xl`}>
+        <div className={`w-full ${form.pickup && form.dropoff && form.pickupLat && form.dropoffLat ? 'lg:w-[55%]' : 'lg:w-full max-w-[480px]'} bg-white/70 backdrop-blur-[1px] sm:rounded-[40px] rounded-3xl p-5 md:p-8 shadow-2xl`}>
           <div className="mb-2">
             <h2 className={`text-lg md:text-2xl font-bold text-gray-900 mb-0.5 ${adlamDisplay.className}`}>
               Book a Taxi in Sydney
