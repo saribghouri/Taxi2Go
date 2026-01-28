@@ -1,8 +1,9 @@
 {
   "info": {
-    "name": "Taxi2Go Backend API",
-    "description": "Complete API collection for testing Taxi2Go backend endpoints",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "name": "Taxi2Go Backend API - V2",
+    "description": "Complete API collection for testing Taxi2Go V2 backend endpoints with vehicle-based pricing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "2.0.0"
   },
   "item": [
     {
@@ -98,7 +99,27 @@
       "name": "Fare",
       "item": [
         {
-          "name": "Calculate Fare - All Vehicles",
+          "name": "Calculate Fare - All Vehicles (Daytime)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.vehicles && response.data.vehicles.length > 0) {",
+                  "        const firstVehicle = response.data.vehicles[0];",
+                  "        pm.environment.set('vehicleId', firstVehicle.vehicleId);",
+                  "        pm.environment.set('vehicleName', firstVehicle.vehicleName);",
+                  "        console.log('Saved vehicleId:', firstVehicle.vehicleId);",
+                  "        console.log('Saved vehicleName:', firstVehicle.vehicleName);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -109,7 +130,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"pickup\": \"Sydney Airport, NSW, Australia\",\n  \"dropoff\": \"Circular Quay, Sydney NSW, Australia\",\n  \"childSeat\": true,\n  \"wheelchair\": false\n}"
+              "raw": "{\n  \"pickup\": \"Sydney Airport, NSW, Australia\",\n  \"dropoff\": \"Circular Quay, Sydney NSW, Australia\",\n  \"pickupTime\": \"2026-01-30T14:00:00.000Z\",\n  \"childSeat\": true,\n  \"wheelchair\": false\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/fare/calculate",
@@ -119,7 +140,7 @@
           }
         },
         {
-          "name": "Calculate Fare - Single Vehicle",
+          "name": "Calculate Fare - All Vehicles (Nighttime)",
           "request": {
             "method": "POST",
             "header": [
@@ -130,7 +151,28 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"pickup\": \"Sydney Airport, NSW, Australia\",\n  \"dropoff\": \"Circular Quay, Sydney NSW, Australia\",\n  \"vehicleType\": \"Sedan\",\n  \"childSeat\": true,\n  \"wheelchair\": false\n}"
+              "raw": "{\n  \"pickup\": \"Sydney Airport, NSW, Australia\",\n  \"dropoff\": \"Circular Quay, Sydney NSW, Australia\",\n  \"pickupTime\": \"2026-01-30T23:30:00.000Z\",\n  \"childSeat\": false,\n  \"wheelchair\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/fare/calculate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "fare", "calculate"]
+            }
+          }
+        },
+        {
+          "name": "Calculate Fare - Long Distance (50+ KM)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup\": \"Sydney CBD, NSW, Australia\",\n  \"dropoff\": \"Wollongong, NSW, Australia\",\n  \"pickupTime\": \"2026-01-30T10:00:00.000Z\",\n  \"childSeat\": false,\n  \"wheelchair\": false\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/fare/calculate",
@@ -145,7 +187,7 @@
       "name": "Booking",
       "item": [
         {
-          "name": "Create Booking (Card)",
+          "name": "Create Booking (Card Payment)",
           "request": {
             "method": "POST",
             "header": [
@@ -156,7 +198,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"pickup\": \"Sydney Airport, NSW, Australia\",\n  \"pickupLat\": -33.9461,\n  \"pickupLng\": 151.1772,\n  \"dropoff\": \"Circular Quay, Sydney NSW, Australia\",\n  \"dropoffLat\": -33.8614,\n  \"dropoffLng\": 151.2108,\n  \"pickupTime\": \"2026-01-26T10:00:00.000Z\",\n  \"vehicleType\": \"Sedan\",\n  \"childSeat\": false,\n  \"wheelchair\": false,\n  \"specialRequirements\": \"Please call upon arrival\",\n  \"passengerName\": \"John Doe\",\n  \"passengerPhone\": \"+61412345678\",\n  \"passengerEmail\": \"john.doe@example.com\",\n  \"paymentMethod\": \"card\"\n}"
+              "raw": "{\n  \"pickup\": \"Sydney Airport, NSW, Australia\",\n  \"pickupLat\": -33.9461,\n  \"pickupLng\": 151.1772,\n  \"dropoff\": \"Circular Quay, Sydney NSW, Australia\",\n  \"dropoffLat\": -33.8614,\n  \"dropoffLng\": 151.2108,\n  \"pickupTime\": \"2026-01-30T10:00:00.000Z\",\n  \"vehicleId\": \"{{vehicleId}}\",\n  \"vehicleType\": \"{{vehicleName}}\",\n  \"childSeat\": false,\n  \"wheelchair\": false,\n  \"specialRequirements\": \"Please call upon arrival\",\n  \"passengerName\": \"John Doe\",\n  \"passengerPhone\": \"+61412345678\",\n  \"passengerEmail\": \"john.doe@example.com\",\n  \"paymentMethod\": \"card\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/booking/create",
@@ -166,7 +208,24 @@
           }
         },
         {
-          "name": "Create Booking (Cash)",
+          "name": "Create Booking (Cash Payment)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.data && response.data.bookingId) {",
+                  "        pm.environment.set('bookingId', response.data.bookingId);",
+                  "        console.log('Booking ID saved:', response.data.bookingId);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -177,7 +236,49 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"pickup\": \"Bondi Beach, Sydney NSW\",\n  \"pickupLat\": -33.8915,\n  \"pickupLng\": 151.2767,\n  \"dropoff\": \"Sydney Opera House, Sydney NSW\",\n  \"dropoffLat\": -33.8568,\n  \"dropoffLng\": 151.2153,\n  \"pickupTime\": \"2026-01-26T14:00:00.000Z\",\n  \"vehicleType\": \"SUV\",\n  \"childSeat\": true,\n  \"wheelchair\": false,\n  \"passengerName\": \"Jane Smith\",\n  \"passengerPhone\": \"+61423456789\",\n  \"passengerEmail\": \"jane.smith@example.com\",\n  \"paymentMethod\": \"cash\"\n}"
+              "raw": "{\n  \"pickup\": \"Bondi Beach, Sydney NSW\",\n  \"pickupLat\": -33.8915,\n  \"pickupLng\": 151.2767,\n  \"dropoff\": \"Sydney Opera House, Sydney NSW\",\n  \"dropoffLat\": -33.8568,\n  \"dropoffLng\": 151.2153,\n  \"pickupTime\": \"2026-01-30T14:00:00.000Z\",\n  \"vehicleId\": \"{{vehicleId}}\",\n  \"vehicleType\": \"{{vehicleName}}\",\n  \"childSeat\": true,\n  \"wheelchair\": false,\n  \"passengerName\": \"Jane Smith\",\n  \"passengerPhone\": \"+61423456789\",\n  \"passengerEmail\": \"jane.smith@example.com\",\n  \"paymentMethod\": \"cash\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/booking/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "booking", "create"]
+            }
+          }
+        },
+        {
+          "name": "Create Booking (Cabcharge Payment)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup\": \"Darling Harbour, Sydney NSW\",\n  \"pickupLat\": -33.8731,\n  \"pickupLng\": 151.1989,\n  \"dropoff\": \"Sydney Airport, NSW, Australia\",\n  \"dropoffLat\": -33.9461,\n  \"dropoffLng\": 151.1772,\n  \"pickupTime\": \"2026-01-30T16:00:00.000Z\",\n  \"vehicleId\": \"{{vehicleId}}\",\n  \"vehicleType\": \"{{vehicleName}}\",\n  \"childSeat\": false,\n  \"wheelchair\": true,\n  \"passengerName\": \"Bob Johnson\",\n  \"passengerPhone\": \"+61434567890\",\n  \"passengerEmail\": \"bob.johnson@example.com\",\n  \"paymentMethod\": \"cabcharge\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/booking/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "booking", "create"]
+            }
+          }
+        },
+        {
+          "name": "Create Booking (TTSS Payment)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pickup\": \"Central Station, Sydney NSW\",\n  \"pickupLat\": -33.8833,\n  \"pickupLng\": 151.2065,\n  \"dropoff\": \"University of Sydney, NSW\",\n  \"dropoffLat\": -33.8886,\n  \"dropoffLng\": 151.1873,\n  \"pickupTime\": \"2026-01-30T08:30:00.000Z\",\n  \"vehicleId\": \"{{vehicleId}}\",\n  \"vehicleType\": \"{{vehicleName}}\",\n  \"childSeat\": false,\n  \"wheelchair\": false,\n  \"passengerName\": \"Alice Brown\",\n  \"passengerPhone\": \"+61445678901\",\n  \"passengerEmail\": \"alice.brown@example.com\",\n  \"paymentMethod\": \"ttss\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/booking/create",
@@ -198,7 +299,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"bookingId\": \"replace-with-booking-id\",\n  \"otp\": \"123456\"\n}"
+              "raw": "{\n  \"bookingId\": \"{{bookingId}}\",\n  \"otp\": \"123456\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/booking/verify-otp",
@@ -219,12 +320,30 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"bookingId\": \"replace-with-booking-id\"\n}"
+              "raw": "{\n  \"bookingId\": \"{{bookingId}}\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/booking/resend-otp",
               "host": ["{{baseUrl}}"],
               "path": ["api", "booking", "resend-otp"]
+            }
+          }
+        },
+        {
+          "name": "Cancel Booking",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/booking/cancel/:bookingId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "booking", "cancel", ":bookingId"],
+              "variable": [
+                {
+                  "key": "bookingId",
+                  "value": "{{bookingId}}"
+                }
+              ]
             }
           }
         },
@@ -240,7 +359,214 @@
               "variable": [
                 {
                   "key": "bookingId",
-                  "value": "replace-with-actual-booking-id"
+                  "value": "{{bookingId}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Vehicle Management",
+      "item": [
+        {
+          "name": "Get All Vehicles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/vehicles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "vehicles"]
+            }
+          }
+        },
+        {
+          "name": "Get Vehicle by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/vehicles/:vehicleId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "vehicles", ":vehicleId"],
+              "variable": [
+                {
+                  "key": "vehicleId",
+                  "value": "{{vehicleId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Vehicle",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Premium Sedan\",\n  \"passengerCapacity\": 4,\n  \"luggageCapacity\": 3,\n  \"status\": \"active\",\n  \"baseFare\": 55.00,\n  \"baseDistance\": 10,\n  \"dayPricePerKm\": 3.00,\n  \"nightPricePerKm\": 3.75,\n  \"nightStartTime\": \"22:00\",\n  \"nightEndTime\": \"06:00\",\n  \"longDistanceThreshold\": 50,\n  \"longDistancePricePerKm\": 2.20,\n  \"minimumFare\": 35.00,\n  \"airportSurcharge\": 5.00,\n  \"enableTollFees\": true,\n  \"childSeatPrice\": 10.00,\n  \"wheelchairPrice\": 15.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/vehicles",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "vehicles"]
+            }
+          }
+        },
+        {
+          "name": "Update Vehicle",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Premium Sedan Updated\",\n  \"passengerCapacity\": 4,\n  \"luggageCapacity\": 3,\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/vehicles/:vehicleId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "vehicles", ":vehicleId"],
+              "variable": [
+                {
+                  "key": "vehicleId",
+                  "value": "{{vehicleId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Vehicle Pricing",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"baseFare\": 60.00,\n  \"dayPricePerKm\": 3.20,\n  \"nightPricePerKm\": 4.00,\n  \"minimumFare\": 40.00,\n  \"airportSurcharge\": 6.00\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/vehicles/:vehicleId/pricing",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "vehicles", ":vehicleId", "pricing"],
+              "variable": [
+                {
+                  "key": "vehicleId",
+                  "value": "{{vehicleId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Deactivate Vehicle (Soft Delete)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/vehicles/:vehicleId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "vehicles", ":vehicleId"],
+              "variable": [
+                {
+                  "key": "vehicleId",
+                  "value": "{{vehicleId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Vehicle Permanently",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/vehicles/:vehicleId?hardDelete=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "vehicles", ":vehicleId"],
+              "query": [
+                {
+                  "key": "hardDelete",
+                  "value": "true"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "vehicleId",
+                  "value": "{{vehicleId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Activate Vehicle",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/vehicles/:vehicleId/activate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "vehicles", ":vehicleId", "activate"],
+              "variable": [
+                {
+                  "key": "vehicleId",
+                  "value": "{{vehicleId}}"
                 }
               ]
             }
