@@ -1,6 +1,6 @@
 "use client"
 import { useState, useRef, useEffect } from "react"
-import { MapPin, Users, CheckCircle, Loader2, Accessibility, RockingChair } from "lucide-react"
+import { MapPin, Users, CheckCircle, Loader2, Accessibility } from "lucide-react"
 import Image from "next/image"
 import { ADLaM_Display } from 'next/font/google'
 import { LoadScript, Autocomplete, GoogleMap, DirectionsRenderer } from '@react-google-maps/api'
@@ -600,7 +600,11 @@ export const BookingForm = () => {
               className="w-3.5 h-3.5 md:w-4 md:h-4 accent-[#FC5E39]"
             />
 
-            <RockingChair className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
+            <img 
+              src="/assets/icons/baby-seat.png" 
+              alt="Child Seat" 
+              className="w-4 h-4 md:w-5 md:h-5 object-contain grayscale opacity-80" 
+            />
             <span className="text-xs md:text-base text-gray-700">Child Seat</span>
           </label>
         </div>
