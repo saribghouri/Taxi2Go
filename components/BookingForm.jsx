@@ -432,22 +432,61 @@ export const BookingForm = () => {
       <div className="space-y-2 mb-3">
         {/* Pickup Location */}
         <div className="relative">
-          <div className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
-            <MapPin className="w-5 h-5 text-gray-700" />
-          </div>
+          <button
+            type="button"
+            onClick={() => {
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                  async (position) => {
+                    const { latitude, longitude } = position.coords
+                    try {
+                      const geocoder = new window.google.maps.Geocoder()
+                      const result = await geocoder.geocode({
+                        location: { lat: latitude, lng: longitude }
+                      })
+                      if (result.results[0]) {
+                        setForm(prev => ({
+                          ...prev,
+                          pickup: result.results[0].formatted_address,
+                          pickupLat: latitude,
+                          pickupLng: longitude
+                        }))
+                        setFareData(null)
+                      }
+                    } catch (error) {
+                      console.error('Geocoding error:', error)
+                      setError('Failed to get address from location')
+                    }
+                  },
+                  (error) => {
+                    console.error('Geolocation error:', error)
+                    setError('Failed to get your location. Please enable location access.')
+                  }
+                )
+              } else {
+                setError('Geolocation is not supported by your browser')
+              }
+            }}
+            className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 z-10 text-[#FC5E39] hover:text-[#e54d2e] transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </button>
           <Autocomplete
             onLoad={onPickupLoad}
             onPlaceChanged={onPickupPlaceChanged}
             options={{
               componentRestrictions: { country: 'au' },
-              types: ['geocode'],
+              types: ['establishment', 'geocode'],
               bounds: {
                 north: -33.578,
                 south: -34.118,
                 east: 151.343,
                 west: 150.521
               },
-              strictBounds: true,
+              strictBounds: false,
               locationBias: {
                 center: { lat: -33.8688, lng: 151.2093 },
                 radius: 50000
@@ -460,29 +499,68 @@ export const BookingForm = () => {
               value={form.pickup}
               onChange={(e) => setForm(prev => ({ ...prev, pickup: e.target.value }))}
               placeholder="Enter pickup location"
-              className="w-full bg-white rounded-full pl-9 md:pl-12 pr-3 py-2 md:py-3 text-xs md:text-base text-gray-700 placeholder:text-gray-400 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors"
+              className="w-full bg-white rounded-full px-3 md:px-4 pr-10 py-2 md:py-3 text-xs md:text-base text-gray-700 placeholder:text-gray-400 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors"
             />
           </Autocomplete>
         </div>
 
         {/* Dropoff Location */}
         <div className="relative">
-          <div className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none">
-            <MapPin className="w-5 h-5 text-gray-700" />
-          </div>
+          <button
+            type="button"
+            onClick={() => {
+              if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                  async (position) => {
+                    const { latitude, longitude } = position.coords
+                    try {
+                      const geocoder = new window.google.maps.Geocoder()
+                      const result = await geocoder.geocode({
+                        location: { lat: latitude, lng: longitude }
+                      })
+                      if (result.results[0]) {
+                        setForm(prev => ({
+                          ...prev,
+                          dropoff: result.results[0].formatted_address,
+                          dropoffLat: latitude,
+                          dropoffLng: longitude
+                        }))
+                        setFareData(null)
+                      }
+                    } catch (error) {
+                      console.error('Geocoding error:', error)
+                      setError('Failed to get address from location')
+                    }
+                  },
+                  (error) => {
+                    console.error('Geolocation error:', error)
+                    setError('Failed to get your location. Please enable location access.')
+                  }
+                )
+              } else {
+                setError('Geolocation is not supported by your browser')
+              }
+            }}
+            className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 z-10 text-[#FC5E39] hover:text-[#e54d2e] transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </button>
           <Autocomplete
             onLoad={onDropoffLoad}
             onPlaceChanged={onDropoffPlaceChanged}
             options={{
               componentRestrictions: { country: 'au' },
-              types: ['geocode'],
+              types: ['establishment', 'geocode'],
               bounds: {
                 north: -33.578,
                 south: -34.118,
                 east: 151.343,
                 west: 150.521
               },
-              strictBounds: true,
+              strictBounds: false,
               locationBias: {
                 center: { lat: -33.8688, lng: 151.2093 },
                 radius: 50000
@@ -495,7 +573,7 @@ export const BookingForm = () => {
               value={form.dropoff}
               onChange={(e) => setForm(prev => ({ ...prev, dropoff: e.target.value }))}
               placeholder="Enter destination"
-              className="w-full bg-white rounded-full pl-9 md:pl-12 pr-3 py-2 md:py-3 text-xs md:text-base text-gray-700 placeholder:text-gray-400 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors"
+              className="w-full bg-white rounded-full px-3 md:px-4 pr-10 py-2 md:py-3 text-xs md:text-base text-gray-700 placeholder:text-gray-400 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors"
             />
           </Autocomplete>
         </div>
@@ -537,18 +615,6 @@ export const BookingForm = () => {
               </div>
             ) : fareData ? (
               <>
-                {/* Trip Info */}
-                <div className="bg-orange-50 rounded-2xl p-2 md:p-3 text-xs md:text-sm">
-                  <div className="flex justify-between mb-1">
-                    <span className="text-gray-600">Distance:</span>
-                    <span className="font-bold text-gray-900">{fareData.distanceKm} km</span>
-                  </div>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-gray-600">Duration:</span>
-                    <span className="font-bold text-gray-900">{fareData.durationMinutes} min</span>
-                  </div>
-                </div>
-
                 {/* Vehicle Selection */}
                 <div className="space-y-1 md:space-y-2">
                   <p className="text-[10px] md:text-xs text-gray-600 font-medium">Select your vehicle:</p>
@@ -558,34 +624,45 @@ export const BookingForm = () => {
                         key={vehicle.vehicleId}
                         type="button"
                         onClick={() => selectVehicle(vehicle.vehicleId, vehicle.vehicleName)}
-                        className={`w-full flex items-center p-1.5 md:p-3 rounded-xl md:rounded-2xl transition-all border-2 ${form.vehicleId === vehicle.vehicleId
+                        className={`w-full flex items-center justify-between gap-3 p-2 md:p-3 rounded-xl md:rounded-2xl transition-all border-2 ${form.vehicleId === vehicle.vehicleId
                           ? 'bg-orange-100 border-[#FC5E39]'
                           : 'bg-white border-orange-300/50 hover:border-[#FF6347]'
                           }`}
                       >
-                        <div className="w-12 h-8 md:w-16 md:h-10 shrink-0 rounded-lg overflow-hidden mr-2 md:mr-3">
-                          <img
-                            src={
-                              vehicle.vehicleName === 'Sedan' ? '/assets/images/sedan-removebg-preview.png' :
-                                vehicle.vehicleName === 'SUV' ? '/assets/images/suv-removebg-preview.png' :
-                                  '/assets/images/11_seater-removebg-preview.png'
-                            }
-                            alt={vehicle.vehicleName}
-                            className="w-full h-full object-contain"
-                          />
-                        </div>
-                        <div className="flex-1 text-left">
-                          <div className="font-bold text-gray-900 text-[11px] md:text-sm">{vehicle.vehicleName}</div>
-                          <div className="flex items-center gap-0.5 md:gap-1 text-gray-500 text-[9px] md:text-xs mt-0">
-                            <Users className="w-2.5 h-2.5 md:w-3 md:h-3" />
-                            Up to {vehicle.passengerCapacity} passengers
+                        {/* Section 1: Image + Vehicle Info */}
+                        <div className="flex items-center gap-2">
+                          <div className="w-12 h-8 md:w-14 md:h-9 shrink-0 rounded-lg overflow-hidden">
+                            <img
+                              src={
+                                vehicle.vehicleName === 'Sedan' ? '/assets/images/sedan-removebg-preview.png' :
+                                  vehicle.vehicleName === 'SUV' ? '/assets/images/suv-removebg-preview.png' :
+                                    '/assets/images/11_seater-removebg-preview.png'
+                              }
+                              alt={vehicle.vehicleName}
+                              className="w-full h-full object-contain"
+                            />
                           </div>
-                          {vehicle.isNightRate && (
-                            <div className="text-[8px] md:text-[10px] text-orange-600 font-medium mt-0.5">
-                              🌙 Night rate applied
+                          <div className="text-left">
+                            <div className="font-bold text-gray-900 text-[11px] md:text-sm">{vehicle.vehicleName}</div>
+                            <div className="flex items-center gap-0.5 md:gap-1 text-gray-500 text-[9px] md:text-xs">
+                              <Users className="w-2.5 h-2.5 md:w-3 md:h-3" />
+                              Up to {vehicle.passengerCapacity} passengers
                             </div>
-                          )}
+                            {vehicle.isNightRate && (
+                              <div className="text-[8px] md:text-[10px] text-orange-600 font-medium">
+                                🌙 Night rate applied
+                              </div>
+                            )}
+                          </div>
                         </div>
+
+                        {/* Section 2: Distance & Time (Vertical) */}
+                        <div className="flex flex-col items-start justify-center text-center">
+                          <div className="text-[10px] md:text-xs font-bold text-gray-900">Distance: {fareData.distanceKm} km</div>
+                          <div className="text-[10px] md:text-xs font-bold text-gray-900">Duration: {fareData.durationMinutes} min</div>
+                        </div>
+
+                        {/* Section 3: Fare */}
                         <div className="text-right">
                           <div className="font-bold text-[#FC5E39] text-sm md:text-base">${vehicle.totalFare.toFixed(2)}</div>
                           {(vehicle.tollAmount > 0 || vehicle.airportSurcharge > 0) && (
@@ -988,29 +1065,21 @@ export const BookingForm = () => {
           {step === 2 && !showOtpInput && Step2}
           {step === 2 && showOtpInput && OtpScreen}
 
-          <div className="hidden md:flex items-center justify-center gap-4 md:gap-6 pt-2">
-            <div className="flex flex-col items-center">
-              <div className="flex items-center gap-1 mb-1">
-                <Image src="/assets/images/fluent-color_people-48.png" alt="People" width={30} height={30} className="md:w-[35px] md:h-[35px]" />
-              </div>
-              <div className="text-base md:text-lg font-bold text-black">50,408</div>
-              <div className="text-xs text-black font-medium">Happy Rides</div>
+          {/* Trust Badge */}
+          <div className="hidden md:flex items-center justify-center gap-2 text-sm text-gray-600 mt-2">
+            <span className="text-gray-500">Trusted by</span>
+            <div className="flex items-center gap-1">
+              <Users className="w-4 h-4 text-[#FC5E39]" />
+              <span className="font-semibold text-gray-900">50K+ riders</span>
             </div>
-
-            <div className="w-px h-10 md:h-12 bg-gray-300"></div>
-
-            <div className="flex flex-col items-center">
-              <div className="flex items-center gap-0.5 mb-1">
-                <Image src="/assets/images/Group.png" alt="Rating Stars" width={45} height={22} className="md:w-[50px] md:h-[25px]" />
-              </div>
-              <div className="text-base md:text-lg font-bold text-black">4.9/5</div>
-              <div className="text-xs text-black font-medium">Rating</div>
+            <span className="text-gray-400">•</span>
+            <div className="flex items-center gap-1">
+              <svg className="w-4 h-4 text-yellow-500 fill-current" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span className="font-semibold text-gray-900">4.9 rating</span>
             </div>
           </div>
-
-          <p className="hidden md:block text-xs text-gray-600 text-center mt-2">
-            Trusted by 50,000+ riders · 4.9★ average
-          </p>
         </div>
 
         {/* Map Preview - Shows when BOTH locations are entered */}
