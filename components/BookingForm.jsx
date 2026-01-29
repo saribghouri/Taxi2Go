@@ -1,10 +1,9 @@
 "use client"
 import { useState, useRef, useEffect } from "react"
-import { MapPin, Car, ChevronDown, Users, CheckCircle, Loader2, RockingChair, Baby } from "lucide-react"
+import { MapPin, Car, ChevronDown, Users, CheckCircle, Loader2, Accessibility, RockingChair } from "lucide-react"
 import Image from "next/image"
 import { ADLaM_Display } from 'next/font/google'
 import { LoadScript, Autocomplete, GoogleMap, DirectionsRenderer } from '@react-google-maps/api'
-import { VehicleType, VehicleDisplayNames, VehicleDescriptions } from '../utils/enums'
 
 const adlamDisplay = ADLaM_Display({
   weight: '400',
@@ -39,7 +38,8 @@ export const BookingForm = () => {
     dropoff: "",
     dropoffLat: null,
     dropoffLng: null,
-    vehicle: "",
+    vehicleId: "",      // NEW: Store MongoDB ObjectId
+    vehicleName: "",    // NEW: Store vehicle name for display
     childSeat: false,
     wheelchair: false,
     name: "",
@@ -87,7 +87,7 @@ export const BookingForm = () => {
 
       return () => clearTimeout(timer)
     }
-  }, [form.pickup, form.dropoff, form.childSeat, form.wheelchair])
+  }, [form.pickup, form.dropoff, form.childSeat, form.wheelchair, form.bookingTime, form.pickupDate, form.pickupTime])
 
   // Timer for resend OTP (1 minute)
   useEffect(() => {
@@ -120,9 +120,9 @@ export const BookingForm = () => {
         body: JSON.stringify({
           pickup: form.pickup,
           dropoff: form.dropoff,
+          pickupTime: formatPickupTime(), // V2: Send pickup time for day/night rate calculation
           childSeat: form.childSeat,
           wheelchair: form.wheelchair,
-          // Note: No vehicleType sent - backend returns all vehicles with pricing
         }),
       })
 
@@ -131,7 +131,7 @@ export const BookingForm = () => {
       // Check if location is outside Sydney
       if (!response.ok || data.success === false) {
         const errorMessage = data.message || 'Failed to calculate fare'
-        
+
         // Check if error is about Sydney location
         if (errorMessage.toLowerCase().includes('sydney')) {
           setIsLocationOutsideSydney(true)
@@ -142,16 +142,27 @@ export const BookingForm = () => {
         return
       }
 
-      // Expected response format:
+      // V2 Response format:
       // {
-      //   distance_km: number,
-      //   duration_minutes: number,
-      //   toll_amount: number,
-      //   airport_surcharge: number,
+      //   distanceKm: number,
+      //   durationMinutes: number,
       //   vehicles: [
-      //     { vehicleType: "Sedan", base_fare: number, total_fare: number },
-      //     { vehicleType: "SUV", base_fare: number, total_fare: number },
-      //     { vehicleType: "Van", base_fare: number, total_fare: number }
+      //     {
+      //       vehicleId: "60d5ec49...",
+      //       vehicleName: "Sedan",
+      //       passengerCapacity: 4,
+      //       luggageCapacity: 2,
+      //       baseFare: 50,
+      //       distanceFare: 7,
+      //       tollAmount: 5.50,
+      //       airportSurcharge: 5,
+      //       childSeatCharge: 0,
+      //       wheelchairCharge: 0,
+      //       totalFare: 67.50,
+      //       isNightRate: true,
+      //       pricePerKm: 3.50,
+      //       minimumFareApplied: false
+      //     }
       //   ]
       // }
       setFareData(data.data)
@@ -244,8 +255,8 @@ export const BookingForm = () => {
     }
   }
 
-  const selectVehicle = (vehicleType) => {
-    setForm((prev) => ({ ...prev, vehicle: vehicleType }))
+  const selectVehicle = (vehicleId, vehicleName) => {
+    setForm((prev) => ({ ...prev, vehicleId: vehicleId, vehicleName: vehicleName }))
   }
 
   const formatPickupTime = () => {
@@ -255,9 +266,15 @@ export const BookingForm = () => {
       now.setMinutes(now.getMinutes() + 15)
       return now.toISOString()
     } else {
-      // Combine date and time into ISO 8601 format
+      // Combine date and time, treating it as local time
       const dateTimeString = `${form.pickupDate}T${form.pickupTime}:00`
-      return new Date(dateTimeString).toISOString()
+      const localDate = new Date(dateTimeString)
+      
+      // Get timezone offset and adjust to keep the local time
+      const timezoneOffset = localDate.getTimezoneOffset() * 60000
+      const adjustedDate = new Date(localDate.getTime() - timezoneOffset)
+      
+      return adjustedDate.toISOString()
     }
   }
 
@@ -274,14 +291,15 @@ export const BookingForm = () => {
         dropoffLat: form.dropoffLat,
         dropoffLng: form.dropoffLng,
         pickupTime: formatPickupTime(),
-        vehicleType: form.vehicle,
+        vehicleId: form.vehicleId,          // V2: REQUIRED - MongoDB ObjectId
+        vehicleType: form.vehicleName,      // V2: Optional display name
         childSeat: form.childSeat,
         wheelchair: form.wheelchair,
         specialRequirements: form.specialRequirements,
         passengerName: form.name,
         passengerPhone: form.phone,
         passengerEmail: form.email,
-        paymentMethod: form.payment,
+        paymentMethod: form.payment,        // V2: card, cash, cabcharge, or ttss
       }
 
       const response = await fetch(`${API_BASE_URL}/api/booking/create`, {
@@ -298,11 +316,11 @@ export const BookingForm = () => {
 
       const { data } = await response.json()
 
-      // If card payment, redirect to Stripe
+      // If card payment, redirect to Stripe (NO OTP)
       if (form.payment === 'card' && data.checkoutUrl) {
         window.location.href = data.checkoutUrl
       } else {
-        // Cash payment - OTP sent, show OTP input
+        // V2: Cash, Cabcharge, or TTSS payment - OTP required
         setBookingId(data.bookingId || data.id)
         setShowOtpInput(true)
       }
@@ -341,7 +359,7 @@ export const BookingForm = () => {
       }
 
       const data = await response.json()
-      
+
       // OTP verified successfully, redirect to success page with booking ID
       window.location.href = `/booking/success?booking_id=${bookingId}`
     } catch (err) {
@@ -384,7 +402,7 @@ export const BookingForm = () => {
   }
 
   const handleStep1Submit = () => {
-    if (!form.pickup || !form.dropoff || !form.vehicle) {
+    if (!form.pickup || !form.dropoff || !form.vehicleId) {
       setError('Please fill in all required fields')
       return
     }
@@ -398,9 +416,10 @@ export const BookingForm = () => {
       return
     }
 
-    // Validate phone format (basic check for + prefix)
-    if (!form.phone.startsWith('+')) {
-      setError('Phone number must include country code (e.g., +61412345678)')
+    // Validate E.164 phone format
+    const e164Regex = /^\+[1-9]\d{1,14}$/
+    if (!e164Regex.test(form.phone)) {
+      setError('Phone number must be in E.164 format (e.g., +61412345678)')
       return
     }
 
@@ -491,7 +510,7 @@ export const BookingForm = () => {
               onChange={handleChange}
               className="w-3.5 h-3.5 md:w-4 md:h-4 accent-[#FC5E39]"
             />
-            <RockingChair className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
+            <Accessibility className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
             <span className="text-xs md:text-base text-gray-700">Wheelchair</span>
           </label>
           <label className="flex-1 flex items-center gap-1.5 bg-white rounded-full px-2 py-2 md:px-4 md:py-3 border-2 border-orange-300/50 cursor-pointer hover:border-[#FF6347] transition-colors">
@@ -502,7 +521,8 @@ export const BookingForm = () => {
               onChange={handleChange}
               className="w-3.5 h-3.5 md:w-4 md:h-4 accent-[#FC5E39]"
             />
-            <Baby className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
+
+            <RockingChair className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
             <span className="text-xs md:text-base text-gray-700">Child Seat</span>
           </label>
         </div>
@@ -527,18 +547,6 @@ export const BookingForm = () => {
                     <span className="text-gray-600">Duration:</span>
                     <span className="font-bold text-gray-900">{fareData.durationMinutes} min</span>
                   </div>
-                  {fareData.toll_amount > 0 && (
-                    <div className="flex justify-between mb-1">
-                      <span className="text-gray-600">Tolls:</span>
-                      <span className="font-bold text-gray-900">${fareData.toll_amount.toFixed(2)}</span>
-                    </div>
-                  )}
-                  {fareData.airport_surcharge > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Airport Surcharge:</span>
-                      <span className="font-bold text-gray-900">${fareData.airport_surcharge.toFixed(2)}</span>
-                    </div>
-                  )}
                 </div>
 
                 {/* Vehicle Selection */}
@@ -547,10 +555,10 @@ export const BookingForm = () => {
                   {fareData.vehicles && fareData.vehicles.length > 0 ? (
                     fareData.vehicles.map((vehicle) => (
                       <button
-                        key={vehicle.vehicleType}
+                        key={vehicle.vehicleId}
                         type="button"
-                        onClick={() => selectVehicle(vehicle.vehicleType)}
-                        className={`w-full flex items-center p-1.5 md:p-3 rounded-xl md:rounded-2xl transition-all border-2 ${form.vehicle === vehicle.vehicleType
+                        onClick={() => selectVehicle(vehicle.vehicleId, vehicle.vehicleName)}
+                        className={`w-full flex items-center p-1.5 md:p-3 rounded-xl md:rounded-2xl transition-all border-2 ${form.vehicleId === vehicle.vehicleId
                           ? 'bg-orange-100 border-[#FC5E39]'
                           : 'bg-white border-orange-300/50 hover:border-[#FF6347]'
                           }`}
@@ -558,23 +566,35 @@ export const BookingForm = () => {
                         <div className="w-12 h-8 md:w-16 md:h-10 shrink-0 rounded-lg overflow-hidden mr-2 md:mr-3">
                           <img
                             src={
-                              vehicle.vehicleType === VehicleType.SEDAN ? '/assets/images/sedan-removebg-preview.png' :
-                                vehicle.vehicleType === VehicleType.SUV ? '/assets/images/suv-removebg-preview.png' :
+                              vehicle.vehicleName === 'Sedan' ? '/assets/images/sedan-removebg-preview.png' :
+                                vehicle.vehicleName === 'SUV' ? '/assets/images/suv-removebg-preview.png' :
                                   '/assets/images/11_seater-removebg-preview.png'
                             }
-                            alt={VehicleDisplayNames[vehicle.vehicleType]}
+                            alt={vehicle.vehicleName}
                             className="w-full h-full object-contain"
                           />
                         </div>
                         <div className="flex-1 text-left">
-                          <div className="font-bold text-gray-900 text-[11px] md:text-sm">{VehicleDisplayNames[vehicle.vehicleType]}</div>
+                          <div className="font-bold text-gray-900 text-[11px] md:text-sm">{vehicle.vehicleName}</div>
                           <div className="flex items-center gap-0.5 md:gap-1 text-gray-500 text-[9px] md:text-xs mt-0">
                             <Users className="w-2.5 h-2.5 md:w-3 md:h-3" />
-                            {VehicleDescriptions[vehicle.vehicleType]}
+                            Up to {vehicle.passengerCapacity} passengers
                           </div>
+                          {vehicle.isNightRate && (
+                            <div className="text-[8px] md:text-[10px] text-orange-600 font-medium mt-0.5">
+                              🌙 Night rate applied
+                            </div>
+                          )}
                         </div>
                         <div className="text-right">
                           <div className="font-bold text-[#FC5E39] text-sm md:text-base">${vehicle.totalFare.toFixed(2)}</div>
+                          {(vehicle.tollAmount > 0 || vehicle.airportSurcharge > 0) && (
+                            <div className="text-[8px] md:text-[10px] text-gray-500 mt-0.5">
+                              {vehicle.tollAmount > 0 && `+$${vehicle.tollAmount.toFixed(2)} toll`}
+                              {vehicle.tollAmount > 0 && vehicle.airportSurcharge > 0 && ', '}
+                              {vehicle.airportSurcharge > 0 && `+$${vehicle.airportSurcharge.toFixed(2)} airport`}
+                            </div>
+                          )}
                         </div>
                       </button>
                     ))
@@ -656,7 +676,7 @@ export const BookingForm = () => {
       <button
         className="w-full bg-[#FC5E39] hover:bg-[#e54d2e] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm md:text-lg rounded-full py-2.5 md:py-3.5 transition-colors shadow-lg mb-2"
         onClick={handleStep1Submit}
-        disabled={!form.pickup || !form.dropoff || !form.vehicle || isCalculatingFare || isLocationOutsideSydney || !fareData}
+        disabled={!form.pickup || !form.dropoff || !form.vehicleId || isCalculatingFare || isLocationOutsideSydney || !fareData}
         type="button"
       >
         Continue to Booking
@@ -664,7 +684,7 @@ export const BookingForm = () => {
     </>
   )
 
-  // OTP Input Screen - Replaces Step 2 when OTP is sent
+  // OTP Input Screen - Replaces Step 2 when OTP is sent (for cash, cabcharge, ttss)
   const OtpScreen = (
     <div className="space-y-4">
       <div className="text-center mb-6">
@@ -676,6 +696,9 @@ export const BookingForm = () => {
           We've sent a 6-digit OTP to
         </p>
         <p className="text-base font-semibold text-[#FC5E39] mt-1">{form.phone}</p>
+        <p className="text-xs text-gray-500 mt-2">
+          Payment method: {form.payment.charAt(0).toUpperCase() + form.payment.slice(1)}
+        </p>
       </div>
 
       <div>
@@ -810,6 +833,28 @@ export const BookingForm = () => {
             />
             <span className="text-gray-700 font-medium text-xs md:text-sm">Card</span>
           </label>
+          <label className="flex-1 flex items-center justify-center py-1.5 md:py-2 cursor-pointer">
+            <input
+              type="radio"
+              name="payment"
+              value="cabcharge"
+              checked={form.payment === "cabcharge"}
+              onChange={handleChange}
+              className="mr-1.5 md:mr-2 accent-[#FC5E39]"
+            />
+            <span className="text-gray-700 font-medium text-xs md:text-sm">Cabcharge</span>
+          </label>
+          <label className="flex-1 flex items-center justify-center py-1.5 md:py-2 cursor-pointer">
+            <input
+              type="radio"
+              name="payment"
+              value="ttss"
+              checked={form.payment === "ttss"}
+              onChange={handleChange}
+              className="mr-1.5 md:mr-2 accent-[#FC5E39]"
+            />
+            <span className="text-gray-700 font-medium text-xs md:text-sm">TTSS</span>
+          </label>
         </div>
       </div>
 
@@ -843,7 +888,7 @@ export const BookingForm = () => {
             </>
           ) : (
             (() => {
-              const selectedVehicle = fareData?.vehicles?.find(v => v.vehicleType === form.vehicle)
+              const selectedVehicle = fareData?.vehicles?.find(v => v.vehicleId === form.vehicleId)
               const totalFare = selectedVehicle?.totalFare || 0
               return `Book Now - $${totalFare.toFixed(2)}`
             })()
@@ -862,7 +907,7 @@ export const BookingForm = () => {
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Booking Confirmed!</h2>
           <p className="text-gray-600 mb-6">
-            Your {VehicleDisplayNames[form.vehicle] || "taxi"} is on the way.
+            Your {form.vehicleName} taxi is on the way.
           </p>
           <div className="w-full space-y-2 text-left bg-gray-50 p-4 rounded-2xl mb-6">
             <div className="flex justify-between text-sm">
@@ -875,14 +920,14 @@ export const BookingForm = () => {
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-500">Vehicle:</span>
-              <span className="font-semibold text-gray-900">{VehicleDisplayNames[form.vehicle]}</span>
+              <span className="font-semibold text-gray-900">{form.vehicleName} Taxi</span>
             </div>
             {fareData && (
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">Total Fare:</span>
                 <span className="font-bold text-[#FC5E39]">
                   ${(() => {
-                    const selectedVehicle = fareData.vehicles?.find(v => v.vehicleType === form.vehicle)
+                    const selectedVehicle = fareData.vehicles?.find(v => v.vehicleId === form.vehicleId)
                     return (selectedVehicle?.totalFare || 0).toFixed(2)
                   })()}
                 </span>
@@ -900,7 +945,8 @@ export const BookingForm = () => {
                 dropoff: "",
                 dropoffLat: null,
                 dropoffLng: null,
-                vehicle: "",
+                vehicleId: "",
+                vehicleName: "",
                 childSeat: false,
                 wheelchair: false,
                 name: "",
