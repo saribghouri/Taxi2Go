@@ -1,6 +1,6 @@
 "use client"
 import { useState, useRef, useEffect } from "react"
-import { MapPin, Car, ChevronDown, Users, CheckCircle, Loader2, Accessibility, RockingChair } from "lucide-react"
+import { MapPin, Users, CheckCircle, Loader2, Accessibility, RockingChair } from "lucide-react"
 import Image from "next/image"
 import { ADLaM_Display } from 'next/font/google'
 import { LoadScript, Autocomplete, GoogleMap, DirectionsRenderer } from '@react-google-maps/api'
@@ -269,11 +269,11 @@ export const BookingForm = () => {
       // Combine date and time, treating it as local time
       const dateTimeString = `${form.pickupDate}T${form.pickupTime}:00`
       const localDate = new Date(dateTimeString)
-      
+
       // Get timezone offset and adjust to keep the local time
       const timezoneOffset = localDate.getTimezoneOffset() * 60000
       const adjustedDate = new Date(localDate.getTime() - timezoneOffset)
-      
+
       return adjustedDate.toISOString()
     }
   }
