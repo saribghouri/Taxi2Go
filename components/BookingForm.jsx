@@ -931,7 +931,7 @@ export const BookingForm = () => {
           name="specialRequirements"
           value={form.specialRequirements}
           onChange={handleChange}
-          placeholder="Special requirements (optional)"
+          placeholder="Special note to driver (optional)"
           rows={2}
           className="w-full bg-white rounded-3xl px-3 py-2 md:px-4 md:py-3 text-xs md:text-base text-gray-700 placeholder:text-gray-400 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors resize-none"
         />
