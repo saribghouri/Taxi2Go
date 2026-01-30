@@ -50,6 +50,7 @@ export const BookingForm = () => {
     bookingTime: "now",
     pickupDate: "",
     pickupTime: "",
+    isTtssSelected: false,
   })
 
   // API states
@@ -87,7 +88,7 @@ export const BookingForm = () => {
 
       return () => clearTimeout(timer)
     }
-  }, [form.pickup, form.dropoff, form.childSeat, form.wheelchair, form.bookingTime, form.pickupDate, form.pickupTime])
+  }, [form.pickup, form.dropoff, form.childSeat, form.wheelchair, form.isTtssSelected, form.bookingTime, form.pickupDate, form.pickupTime])
 
   // Timer for resend OTP (1 minute)
   useEffect(() => {
@@ -123,6 +124,7 @@ export const BookingForm = () => {
           pickupTime: formatPickupTime(), // V2: Send pickup time for day/night rate calculation
           childSeat: form.childSeat,
           wheelchair: form.wheelchair,
+          isTtssSelected: form.isTtssSelected,
         }),
       })
 
@@ -211,7 +213,7 @@ export const BookingForm = () => {
     }))
 
     // Reset fare data when locations or options change
-    if (name === 'pickup' || name === 'dropoff' || name === 'childSeat' || name === 'wheelchair') {
+    if (name === 'pickup' || name === 'dropoff' || name === 'childSeat' || name === 'wheelchair' || name === 'isTtssSelected') {
       setFareData(null)
       setIsLocationOutsideSydney(false)
     }
@@ -299,7 +301,8 @@ export const BookingForm = () => {
         passengerName: form.name,
         passengerPhone: form.phone,
         passengerEmail: form.email,
-        paymentMethod: form.payment,        // V2: card, cash, cabcharge, or ttss
+        paymentMethod: form.payment,        // V2: card, cash, cabcharge
+        isTtssSelected: form.isTtssSelected,
       }
 
       const response = await fetch(`${API_BASE_URL}/api/booking/create`, {
@@ -600,10 +603,10 @@ export const BookingForm = () => {
               className="w-3.5 h-3.5 md:w-4 md:h-4 accent-[#FC5E39]"
             />
 
-            <img 
-              src="/assets/icons/baby-seat.png" 
-              alt="Child Seat" 
-              className="w-4 h-4 md:w-5 md:h-5 object-contain grayscale opacity-80" 
+            <img
+              src="/assets/icons/baby-seat.png"
+              alt="Child Seat"
+              className="w-4 h-4 md:w-5 md:h-5 object-contain grayscale opacity-80"
             />
             <span className="text-xs md:text-base text-gray-700">Child Seat</span>
           </label>
@@ -689,6 +692,35 @@ export const BookingForm = () => {
             ) : null}
           </>
         )}
+
+        {/* TTSS Selection */}
+        <div className="mt-2 mb-3 flex items-center justify-center">
+          <label className="flex items-center gap-2 cursor-pointer group">
+            <div className="relative flex items-center">
+              <input
+                type="checkbox"
+                name="isTtssSelected"
+                checked={form.isTtssSelected}
+                onChange={handleChange}
+                className="w-4 h-4 md:w-5 md:h-5 accent-[#FC5E39] rounded border-gray-300 focus:ring-[#FC5E39]"
+              />
+            </div>
+            <span className="text-sm md:text-base text-gray-700 font-medium">
+              I want to pay via TTSS
+            </span>
+            <div className="relative group/tooltip ml-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 hover:text-gray-600 transition-colors cursor-help">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 p-2 bg-gray-800 text-white text-xs rounded shadow-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all z-50 text-center pointer-events-none">
+                Taxi Transport Subsidy Scheme (TTSS) provides discounted fares for eligible passengers.
+                <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+              </div>
+            </div>
+          </label>
+        </div>
 
         {/* Book Now / Later */}
         <div className="flex gap-3 md:gap-6 items-center justify-center pt-1 md:pt-2">
@@ -925,17 +957,6 @@ export const BookingForm = () => {
             />
             <span className="text-gray-700 font-medium text-xs md:text-sm">Cabcharge</span>
           </label>
-          <label className="flex-1 flex items-center justify-center py-1.5 md:py-2 cursor-pointer">
-            <input
-              type="radio"
-              name="payment"
-              value="ttss"
-              checked={form.payment === "ttss"}
-              onChange={handleChange}
-              className="mr-1.5 md:mr-2 accent-[#FC5E39]"
-            />
-            <span className="text-gray-700 font-medium text-xs md:text-sm">TTSS</span>
-          </label>
         </div>
       </div>
 
@@ -1035,6 +1056,7 @@ export const BookingForm = () => {
                 phone: "",
                 specialRequirements: "",
                 payment: "card",
+                isTtssSelected: false,
                 bookingTime: "now",
                 pickupDate: "",
                 pickupTime: "",
