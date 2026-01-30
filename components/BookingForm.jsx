@@ -262,22 +262,24 @@ export const BookingForm = () => {
   }
 
   const formatPickupTime = () => {
+    let dateToFormat
+
     if (form.bookingTime === 'now') {
-      // Current time + 15 minutes
+      // Current time + 5 minutes
       const now = new Date()
-      now.setMinutes(now.getMinutes() + 15)
-      return now.toISOString()
+      now.setMinutes(now.getMinutes() + 5)
+      dateToFormat = now
     } else {
-      // Combine date and time, treating it as local time
+      // Combine date and time
       const dateTimeString = `${form.pickupDate}T${form.pickupTime}:00`
-      const localDate = new Date(dateTimeString)
-
-      // Get timezone offset and adjust to keep the local time
-      const timezoneOffset = localDate.getTimezoneOffset() * 60000
-      const adjustedDate = new Date(localDate.getTime() - timezoneOffset)
-
-      return adjustedDate.toISOString()
+      dateToFormat = new Date(dateTimeString)
     }
+
+    // Adjust to send Wall Clock Time as UTC
+    // This removes the browser's timezone offset from the timestamp so the backend receives the absolute time as UTC
+    const timezoneOffset = dateToFormat.getTimezoneOffset() * 60000
+    const adjustedDate = new Date(dateToFormat.getTime() - timezoneOffset)
+    return adjustedDate.toISOString()
   }
 
   const createBooking = async () => {
