@@ -615,6 +615,36 @@ export const BookingForm = () => {
         {/* Show loading or vehicles after locations filled */}
         {form.pickup && form.dropoff && (
           <>
+            <div className="mt-2 mb-3 flex items-center justify-between">
+              <p className={`text-[10px] md:text-xs text-gray-600 font-medium ${fareData ? 'opacity-100' : 'opacity-0'}`}>Select your vehicle:</p>
+
+              <label className="flex items-center gap-2 cursor-pointer group">
+                <div className="relative flex items-center">
+                  <input
+                    type="checkbox"
+                    name="isTtssSelected"
+                    checked={form.isTtssSelected}
+                    onChange={handleChange}
+                    className="w-4 h-4 md:w-5 md:h-5 accent-[#FC5E39] rounded border-gray-300 focus:ring-[#FC5E39]"
+                  />
+                </div>
+                <span className="text-sm md:text-base text-gray-700 font-medium">
+                  I want to pay via TTSS
+                </span>
+                <div className="relative group/tooltip ml-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 hover:text-gray-600 transition-colors cursor-help">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                  <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 p-2 bg-gray-800 text-white text-xs rounded shadow-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all z-50 text-center pointer-events-none">
+                    Taxi Transport Subsidy Scheme (TTSS) provides discounted fares for eligible passengers.
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+                  </div>
+                </div>
+              </label>
+            </div>
+
             {isCalculatingFare ? (
               <div className="flex items-center justify-center py-8">
                 <Loader2 className="w-8 h-8 animate-spin text-[#FC5E39]" />
@@ -624,7 +654,7 @@ export const BookingForm = () => {
               <>
                 {/* Vehicle Selection */}
                 <div className="space-y-1 md:space-y-2">
-                  <p className="text-[10px] md:text-xs text-gray-600 font-medium">Select your vehicle:</p>
+                  {/* <p className="text-[10px] md:text-xs text-gray-600 font-medium">Select your vehicle:</p> */}
                   {fareData.vehicles && fareData.vehicles.length > 0 ? (
                     fareData.vehicles.map((vehicle) => (
                       <button
@@ -665,8 +695,8 @@ export const BookingForm = () => {
 
                         {/* Section 2: Distance & Time (Vertical) */}
                         <div className="flex flex-col items-start justify-center text-center">
-                          <div className="text-[10px] md:text-xs font-bold text-gray-900">Distance: {fareData.distanceKm} km</div>
-                          <div className="text-[10px] md:text-xs font-bold text-gray-900">Duration: {fareData.durationMinutes} min</div>
+                          <div className="text-[10px] md:text-xs font-bold text-gray-900">KM: {fareData.distanceKm} km</div>
+                          <div className="text-[10px] md:text-xs font-bold text-gray-900">ETA: {fareData.durationMinutes} min</div>
                         </div>
 
                         {/* Section 3: Fare */}
@@ -694,32 +724,8 @@ export const BookingForm = () => {
         )}
 
         {/* TTSS Selection */}
-        <div className="mt-2 mb-3 flex items-center justify-center">
-          <label className="flex items-center gap-2 cursor-pointer group">
-            <div className="relative flex items-center">
-              <input
-                type="checkbox"
-                name="isTtssSelected"
-                checked={form.isTtssSelected}
-                onChange={handleChange}
-                className="w-4 h-4 md:w-5 md:h-5 accent-[#FC5E39] rounded border-gray-300 focus:ring-[#FC5E39]"
-              />
-            </div>
-            <span className="text-sm md:text-base text-gray-700 font-medium">
-              I want to pay via TTSS
-            </span>
-            <div className="relative group/tooltip ml-1">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400 hover:text-gray-600 transition-colors cursor-help">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                <line x1="12" y1="17" x2="12.01" y2="17"></line>
-              </svg>
-              <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-48 p-2 bg-gray-800 text-white text-xs rounded shadow-lg opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all z-50 text-center pointer-events-none">
-                Taxi Transport Subsidy Scheme (TTSS) provides discounted fares for eligible passengers.
-                <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
-              </div>
-            </div>
-          </label>
+        <div className="mt-2 mb-3 flex items-center justify-between">
+
         </div>
 
         {/* Book Now / Later */}
