@@ -435,6 +435,9 @@ export const BookingForm = () => {
       <div className="space-y-2 mb-3">
         {/* Pickup Location */}
         <div className="relative">
+          <div className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-10 text-gray-400">
+            <MapPin className="w-5 h-5" />
+          </div>
           <button
             type="button"
             onClick={() => {
@@ -472,9 +475,8 @@ export const BookingForm = () => {
             }}
             className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 z-10 text-[#FC5E39] hover:text-[#e54d2e] transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"></path>
             </svg>
           </button>
           <Autocomplete
@@ -502,13 +504,16 @@ export const BookingForm = () => {
               value={form.pickup}
               onChange={(e) => setForm(prev => ({ ...prev, pickup: e.target.value }))}
               placeholder="Enter pickup location"
-              className="w-full bg-white rounded-full px-3 md:px-4 pr-10 py-2 md:py-3 text-xs md:text-base text-gray-700 placeholder:text-gray-400 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors"
+              className="w-full bg-white rounded-full pl-10 md:pl-12 pr-10 py-2 md:py-3 text-xs md:text-base text-gray-700 placeholder:text-gray-400 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors"
             />
           </Autocomplete>
         </div>
 
         {/* Dropoff Location */}
         <div className="relative">
+          <div className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 z-10 text-gray-400">
+            <MapPin className="w-5 h-5" />
+          </div>
           <button
             type="button"
             onClick={() => {
@@ -546,9 +551,8 @@ export const BookingForm = () => {
             }}
             className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 z-10 text-[#FC5E39] hover:text-[#e54d2e] transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"></path>
             </svg>
           </button>
           <Autocomplete
@@ -576,7 +580,7 @@ export const BookingForm = () => {
               value={form.dropoff}
               onChange={(e) => setForm(prev => ({ ...prev, dropoff: e.target.value }))}
               placeholder="Enter destination"
-              className="w-full bg-white rounded-full px-3 md:px-4 pr-10 py-2 md:py-3 text-xs md:text-base text-gray-700 placeholder:text-gray-400 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors"
+              className="w-full bg-white rounded-full pl-10 md:pl-12 pr-10 py-2 md:py-3 text-xs md:text-base text-gray-700 placeholder:text-gray-400 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors"
             />
           </Autocomplete>
         </div>
