@@ -701,7 +701,7 @@ export const BookingForm = () => {
 
                         {/* Section 2: Distance & Time (Vertical) */}
                         <div className="flex flex-col items-start justify-center text-center">
-                          <div className="text-[10px] md:text-xs font-bold text-gray-900">KM: {fareData.distanceKm} km</div>
+                          <div className="text-[10px] md:text-xs font-bold text-gray-900">DIS: {fareData.distanceKm} km</div>
                           <div className="text-[10px] md:text-xs font-bold text-gray-900">ETA: {fareData.durationMinutes} min</div>
                         </div>
 
