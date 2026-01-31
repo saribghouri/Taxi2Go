@@ -718,8 +718,8 @@ export const BookingForm = () => {
                           {(vehicle.tollAmount > 0 || vehicle.airportSurcharge > 0) && (
                             <div className="text-[8px] md:text-[10px] text-gray-500 mt-0.5">
                               {/* {vehicle.tollAmount > 0 && `+$${vehicle.tollAmount.toFixed(2)} toll`} */}
-                              {/* {vehicle.tollAmount > 0 && vehicle.airportSurcharge > 0 && ', '}
-                              {vehicle.airportSurcharge > 0 && `+$${vehicle.airportSurcharge.toFixed(2)} airport`} */}
+                              {vehicle.tollAmount > 0 && vehicle.airportSurcharge > 0 && ', '}
+                              {vehicle.airportSurcharge > 0 && `+$${vehicle.airportSurcharge.toFixed(2)} airport`}
                             </div>
                           )}
                         </div>
