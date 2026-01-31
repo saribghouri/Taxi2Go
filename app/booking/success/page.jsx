@@ -273,73 +273,18 @@ function BookingSuccessContent() {
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">Base Fare</span>
                 <span className="text-sm font-semibold text-gray-900">
-                  ${bookingDetails.baseFare?.toFixed(2) || '0.00'}
+                  ${(bookingDetails.totalFare - bookingDetails.levy)?.toFixed(2) || '0.00'}
                 </span>
               </div>
 
-              {bookingDetails.distanceKm && bookingDetails.farePerKm && (
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">
-                    Distance ({bookingDetails.distanceKm} km × ${bookingDetails.farePerKm?.toFixed(2)}/km)
-                  </span>
-                  <span className="text-sm font-semibold text-gray-900">
-                    ${((bookingDetails.distanceKm * bookingDetails.farePerKm) - bookingDetails.baseFare).toFixed(2)}
-                  </span>
-                </div>
-              )}
-
-              {bookingDetails.tollAmount > 0 && (
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Toll Charges</span>
-                  <span className="text-sm font-semibold text-gray-900">
-                    ${bookingDetails.tollAmount?.toFixed(2)}
-                  </span>
-                </div>
-              )}
-
-              {bookingDetails.airportSurcharge > 0 && (
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Airport Surcharge</span>
-                  <span className="text-sm font-semibold text-gray-900">
-                    ${bookingDetails.airportSurcharge?.toFixed(2)}
-                  </span>
-                </div>
-              )}
-
-              {bookingDetails.childSeatCharge > 0 && (
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Child Seat</span>
-                  <span className="text-sm font-semibold text-gray-900">
-                    ${bookingDetails.childSeatCharge?.toFixed(2)}
-                  </span>
-                </div>
-              )}
-
-              {bookingDetails.wheelchairCharge > 0 && (
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Wheelchair Accessible</span>
-                  <span className="text-sm font-semibold text-gray-900">
-                    ${bookingDetails.wheelchairCharge?.toFixed(2)}
-                  </span>
-                </div>
-              )}
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-600">Levy Charges</span>
+                <span className="text-sm font-semibold text-gray-900">
+                  ${bookingDetails.levy?.toFixed(2) || '0.00'}
+                </span>
+              </div>
 
               <div className="pt-3 mt-3 border-t-2 border-orange-300">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-600">Payment Method</span>
-                  <span className="text-sm font-semibold text-gray-900 capitalize">
-                    {bookingDetails.paymentMethod || 'N/A'}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center mb-3">
-                  <span className="text-sm text-gray-600">Payment Status</span>
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${bookingDetails.paymentStatus === 'Paid'
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-yellow-100 text-yellow-700'
-                    }`}>
-                    {bookingDetails.paymentStatus || 'Pending'}
-                  </span>
-                </div>
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-bold text-gray-900">Total Fare</span>
                   <span className="text-3xl font-bold text-[#FC5E39]">
