@@ -217,6 +217,14 @@ export const BookingForm = () => {
       setFareData(null)
       setIsLocationOutsideSydney(false)
     }
+
+    // V2: If TTSS is selected, force payment method to CASH
+    if (name === 'isTtssSelected' && checked) {
+      setForm((prev) => ({
+        ...prev,
+        payment: 'cash'
+      }))
+    }
   }
 
   const onPickupLoad = (autocomplete) => {
@@ -947,24 +955,26 @@ export const BookingForm = () => {
             />
             <span className="text-gray-700 font-medium text-xs md:text-sm">Cash</span>
           </label>
-          <label className="flex-1 flex items-center justify-center py-1.5 md:py-2 cursor-pointer">
+          <label className={`flex-1 flex items-center justify-center py-1.5 md:py-2 cursor-pointer ${form.isTtssSelected ? 'opacity-50 cursor-not-allowed' : ''}`}>
             <input
               type="radio"
               name="payment"
               value="card"
               checked={form.payment === "card"}
               onChange={handleChange}
+              disabled={form.isTtssSelected}
               className="mr-1.5 md:mr-2 accent-[#FC5E39]"
             />
             <span className="text-gray-700 font-medium text-xs md:text-sm">Card</span>
           </label>
-          <label className="flex-1 flex items-center justify-center py-1.5 md:py-2 cursor-pointer">
+          <label className={`flex-1 flex items-center justify-center py-1.5 md:py-2 cursor-pointer ${form.isTtssSelected ? 'opacity-50 cursor-not-allowed' : ''}`}>
             <input
               type="radio"
               name="payment"
               value="cabcharge"
               checked={form.payment === "cabcharge"}
               onChange={handleChange}
+              disabled={form.isTtssSelected}
               className="mr-1.5 md:mr-2 accent-[#FC5E39]"
             />
             <span className="text-gray-700 font-medium text-xs md:text-sm">Cabcharge</span>
