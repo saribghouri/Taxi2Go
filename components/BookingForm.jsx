@@ -1,7 +1,6 @@
 "use client"
 import { useState, useRef, useEffect } from "react"
 import { MapPin, Users, CheckCircle, Loader2, Accessibility } from "lucide-react"
-import Image from "next/image"
 import { ADLaM_Display } from 'next/font/google'
 import { LoadScript, Autocomplete, GoogleMap, DirectionsRenderer } from '@react-google-maps/api'
 
@@ -718,9 +717,9 @@ export const BookingForm = () => {
                           <div className="font-bold text-[#FC5E39] text-sm md:text-base">${vehicle.totalFare.toFixed(2)}</div>
                           {(vehicle.tollAmount > 0 || vehicle.airportSurcharge > 0) && (
                             <div className="text-[8px] md:text-[10px] text-gray-500 mt-0.5">
-                              {vehicle.tollAmount > 0 && `+$${vehicle.tollAmount.toFixed(2)} toll`}
-                              {vehicle.tollAmount > 0 && vehicle.airportSurcharge > 0 && ', '}
-                              {vehicle.airportSurcharge > 0 && `+$${vehicle.airportSurcharge.toFixed(2)} airport`}
+                              {/* {vehicle.tollAmount > 0 && `+$${vehicle.tollAmount.toFixed(2)} toll`} */}
+                              {/* {vehicle.tollAmount > 0 && vehicle.airportSurcharge > 0 && ', '}
+                              {vehicle.airportSurcharge > 0 && `+$${vehicle.airportSurcharge.toFixed(2)} airport`} */}
                             </div>
                           )}
                         </div>
