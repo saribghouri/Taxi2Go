@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "prod": "npm run build && pm2 restart web || pm2 start npm --name web -- start",
+    "prod": "npm run build && pm2 restart web ||pm2 start npm --name web -- run start",
     "start": "next start",
     "lint": "eslint"
   },
