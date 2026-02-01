@@ -223,12 +223,12 @@ function BookingSuccessContent() {
                 <div className="flex flex-wrap gap-2">
                   {bookingDetails.childSeat && (
                     <span className="inline-flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
-                      👶 Child Seat (+${bookingDetails.childSeatCharge?.toFixed(2) || '10.00'})
+                      👶 Child Seat
                     </span>
                   )}
                   {bookingDetails.wheelchair && (
                     <span className="inline-flex items-center gap-1 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-semibold">
-                      ♿ Wheelchair (+${bookingDetails.wheelchairCharge?.toFixed(2) || '15.00'})
+                      ♿ Wheelchair
                     </span>
                   )}
                 </div>
