@@ -95,12 +95,12 @@ function BookingSuccessContent() {
         {/* Success Icon */}
         <div className="text-center mb-8">
           <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 animate-in zoom-in duration-500 ${bookingDetails?.bookingStatus === 'Confirmed' || bookingDetails?.bookingStatus === 'Completed'
-              ? 'bg-green-100'
-              : 'bg-yellow-100'
+            ? 'bg-green-100'
+            : 'bg-yellow-100'
             }`}>
             <CheckCircle className={`w-16 h-16 ${bookingDetails?.bookingStatus === 'Confirmed' || bookingDetails?.bookingStatus === 'Completed'
-                ? 'text-green-500'
-                : 'text-yellow-500'
+              ? 'text-green-500'
+              : 'text-yellow-500'
               }`} />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
@@ -129,18 +129,18 @@ function BookingSuccessContent() {
         {bookingDetails && (
           <div className="mb-6">
             <div className={`rounded-2xl p-4 text-center ${bookingDetails.bookingStatus === 'Confirmed' || bookingDetails.bookingStatus === 'Completed'
-                ? 'bg-green-50 border-2 border-green-200'
-                : bookingDetails.bookingStatus === 'Pending'
-                  ? 'bg-yellow-50 border-2 border-yellow-200'
-                  : 'bg-gray-50 border-2 border-gray-200'
+              ? 'bg-green-50 border-2 border-green-200'
+              : bookingDetails.bookingStatus === 'Pending'
+                ? 'bg-yellow-50 border-2 border-yellow-200'
+                : 'bg-gray-50 border-2 border-gray-200'
               }`}>
               <div className="flex items-center justify-center gap-2">
                 <span className="text-sm font-semibold text-gray-600">Status:</span>
                 <span className={`text-lg font-bold ${bookingDetails.bookingStatus === 'Confirmed' || bookingDetails.bookingStatus === 'Completed'
-                    ? 'text-green-600'
-                    : bookingDetails.bookingStatus === 'Pending'
-                      ? 'text-yellow-600'
-                      : 'text-gray-600'
+                  ? 'text-green-600'
+                  : bookingDetails.bookingStatus === 'Pending'
+                    ? 'text-yellow-600'
+                    : 'text-gray-600'
                   }`}>
                   {bookingDetails.bookingStatus || 'Pending'}
                 </span>
@@ -270,6 +270,12 @@ function BookingSuccessContent() {
             <h2 className="text-xl font-bold text-gray-900 mb-4">Fare Breakdown</h2>
 
             <div className="space-y-2">
+              {bookingDetails.isTtssSelected && (
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-green-50 border border-green-200 mb-3">
+                  <span className="text-green-700 font-medium">✓ You have used TTSS (Taxi Transport Subsidy Scheme) discount for this booking.</span>
+                </div>
+              )}
+
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">Base Fare</span>
                 <span className="text-sm font-semibold text-gray-900">
