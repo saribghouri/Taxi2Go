@@ -21,7 +21,7 @@ export const Footer = () => {
       {/* Description */}
       <div className="mb-12 pb-8 border-b border-gray-700">
         <p className="text-black text-lg leading-relaxed max-w-4xl">
-          Professional Sydney taxi service operating across the Sydney metropolitan area only.
+          Professional Sydney taxi service operating across the Sydney metropolitan area.
         </p>
       </div>
 

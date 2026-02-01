@@ -20,7 +20,7 @@ const vehicles = [
   },
   {
     name: "SUV",
-    passengers: "1-4 Passengers",
+    passengers: "1-7 Passengers",
     image: "/assets/images/suv.png",
     capacity: 4,
     luggage: 5,

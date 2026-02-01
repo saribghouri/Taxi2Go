@@ -53,7 +53,7 @@ export const Testimonials = () => {
     <section className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <h2 className={`text-3xl md:text-[48px] font-bold text-center text-gray-900 mb-16 ${adlamDisplay.className}`}>
-        Real reviews from Sydney riders who book with Taxi2Go every day
+        Real reviews
         </h2>
 
         {/* Mobile: single-card slider with dots */}
