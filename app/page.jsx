@@ -103,29 +103,29 @@ export default function Home() {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="#benefits"
+                  href="#book"
                   className="block text-gray-900 font-semibold hover:text-[#FF6B4A]"
                   onClick={() => setIsDrawerOpen(false)}
                 >
-                  Benefits
+                  Book Taxi
                 </a>
               </li>
               <li>
                 <a
-                  href="#specifications"
+                  href="#airport"
                   className="block text-gray-900 font-semibold hover:text-[#FF6B4A]"
                   onClick={() => setIsDrawerOpen(false)}
                 >
-                  Specifications
+                  Airport Taxi
                 </a>
               </li>
               <li>
                 <a
-                  href="#how-to"
+                  href="#safety"
                   className="block text-gray-900 font-semibold hover:text-[#FF6B4A]"
                   onClick={() => setIsDrawerOpen(false)}
                 >
-                  How-to
+                  Safety
                 </a>
               </li>
               <li>
@@ -134,7 +134,7 @@ export default function Home() {
                   className="block text-gray-900 font-semibold hover:text-[#FF6B4A]"
                   onClick={() => setIsDrawerOpen(false)}
                 >
-                  Contact Us
+                  Contact
                 </a>
               </li>
             </ul>
