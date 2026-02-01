@@ -39,6 +39,7 @@ export const Footer = () => {
         
             <li><a href="#" className="text-black hover:text-brand-orange transition-colors duration-300 block">Sydney Taxi Service</a></li>
             <li><a href="#" className="text-black hover:text-brand-orange transition-colors duration-300 block">Airport Taxi</a></li>
+            <li><a href="/lost-item" className="text-black hover:text-brand-orange transition-colors duration-300 block">Lost Item</a></li>
             <li><a href="#" className="text-black hover:text-brand-orange transition-colors duration-300 block">
               Contact Us</a></li>
             <li><a href="#" className="text-black hover:text-brand-orange transition-colors duration-300 block">Book Taxi</a></li>

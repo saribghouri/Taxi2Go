@@ -121,11 +121,11 @@ export default function Home() {
               </li>
               <li>
                 <a
-                  href="#safety"
+                  href="/lost-item"
                   className="block text-gray-900 font-semibold hover:text-[#FF6B4A]"
                   onClick={() => setIsDrawerOpen(false)}
                 >
-                  Safety
+                  Lost Item
                 </a>
               </li>
               <li>

@@ -29,8 +29,8 @@ export const Header = () => {
             <a href="#airport" className="hover:text-[#FF6347] text-sm md:text-base lg:text-lg xl:text-[20px] transition-colors">
               Airport Taxi
             </a>
-            <a href="#safety" className="hover:text-[#FF6347] text-sm md:text-base lg:text-lg xl:text-[20px] transition-colors">
-              Safety
+            <a href="/lost-item" className="hover:text-[#FF6347] text-sm md:text-base lg:text-lg xl:text-[20px] transition-colors">
+              Lost Item
             </a>
             <a href="#contact" className="hover:text-[#FF6347] text-sm md:text-base lg:text-lg xl:text-[20px] transition-colors">
               Contact
