@@ -50,6 +50,8 @@ export const BookingForm = () => {
     pickupDate: "",
     pickupTime: "",
     isTtssSelected: false,
+    people: 1,
+    bags: 0,
   })
 
   // API states
@@ -264,8 +266,14 @@ export const BookingForm = () => {
     }
   }
 
-  const selectVehicle = (vehicleId, vehicleName) => {
-    setForm((prev) => ({ ...prev, vehicleId: vehicleId, vehicleName: vehicleName }))
+  const selectVehicle = (vehicleId, vehicleName, passengerCapacity, luggageCapacity) => {
+    setForm((prev) => ({
+      ...prev,
+      vehicleId,
+      vehicleName,
+      people: 1,
+      bags: 0
+    }))
   }
 
   const formatPickupTime = () => {
@@ -673,15 +681,15 @@ export const BookingForm = () => {
                       <button
                         key={vehicle.vehicleId}
                         type="button"
-                        onClick={() => selectVehicle(vehicle.vehicleId, vehicle.vehicleName)}
-                        className={`w-full flex items-center justify-between gap-3 p-2 md:p-3 rounded-xl md:rounded-2xl transition-all border-2 ${form.vehicleId === vehicle.vehicleId
+                        onClick={() => selectVehicle(vehicle.vehicleId, vehicle.vehicleName, vehicle.passengerCapacity, vehicle.luggageCapacity)}
+                        className={`w-full flex items-center justify-between gap-1.5 sm:gap-3 p-1.5 sm:p-2 md:p-3 rounded-xl md:rounded-2xl transition-all border-2 ${form.vehicleId === vehicle.vehicleId
                           ? 'bg-orange-100 border-[#FC5E39]'
                           : 'bg-white border-orange-300/50 hover:border-[#FF6347]'
                           }`}
                       >
                         {/* Section 1: Image + Vehicle Info */}
-                        <div className="flex items-center gap-2">
-                          <div className="w-12 h-8 md:w-14 md:h-9 shrink-0 rounded-lg overflow-hidden">
+                        <div className="flex items-center gap-1.5 sm:gap-2 min-w-0 flex-shrink">
+                          <div className="w-10 h-7 sm:w-12 sm:h-8 md:w-14 md:h-9 shrink-0 rounded-lg overflow-hidden">
                             <img
                               src={
                                 vehicle.vehicleName === 'Sedan' ? '/assets/images/sedan-removebg-preview.png' :
@@ -692,36 +700,104 @@ export const BookingForm = () => {
                               className="w-full h-full object-contain"
                             />
                           </div>
-                          <div className="text-left">
-                            <div className="font-bold text-gray-900 text-[11px] md:text-sm">{vehicle.vehicleName}</div>
-                            <div className="flex items-center gap-0.5 md:gap-1 text-gray-500 text-[9px] md:text-xs">
-                              <Users className="w-2.5 h-2.5 md:w-3 md:h-3" />
-                              Up to {vehicle.passengerCapacity} passengers
+                          <div className="text-left min-w-0">
+                            <div className="font-bold text-gray-900 text-[10px] sm:text-[11px] md:text-sm truncate">{vehicle.vehicleName}</div>
+                            <div className="flex items-center gap-0.5 text-gray-500 text-[8px] sm:text-[9px] md:text-xs">
+                              <Users className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3 md:h-3 shrink-0" />
+                              <span className="truncate">Up to {vehicle.passengerCapacity}</span>
                             </div>
                             {vehicle.isNightRate && (
-                              <div className="text-[8px] md:text-[10px] text-orange-600 font-medium">
-                                🌙 Night rate applied
+                              <div className="text-[7px] sm:text-[8px] md:text-[10px] text-orange-600 font-medium">
+                                🌙 Night rate
                               </div>
                             )}
                           </div>
                         </div>
 
-                        {/* Section 2: Distance & Time (Vertical) */}
-                        <div className="flex flex-col items-start justify-center text-center">
-                          <div className="text-[10px] md:text-xs font-bold text-gray-900">DIS: {fareData.distanceKm} km</div>
-                          <div className="text-[10px] md:text-xs font-bold text-gray-900">ETA: {fareData.durationMinutes} min</div>
+                        {/* Section 2: People & Bags Controls (Vertical) */}
+                        <div className="flex flex-col items-start justify-center gap-1 shrink-0">
+                          {/* People Control */}
+                          <div className="flex items-center gap-0.5">
+                            <span className="text-[7px] sm:text-[8px] md:text-xs text-gray-600 font-medium w-8 sm:w-10 md:w-14">People:</span>
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  if (form.vehicleId === vehicle.vehicleId && form.people > 1) {
+                                    setForm(prev => ({ ...prev, people: prev.people - 1 }))
+                                  }
+                                }}
+                                disabled={form.vehicleId !== vehicle.vehicleId || form.people <= 1}
+                                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed text-gray-700 rounded-full text-[10px] sm:text-xs md:text-sm font-bold transition-colors"
+                              >
+                                −
+                              </button>
+                              <span className="text-[10px] sm:text-xs md:text-sm font-bold text-gray-900 w-3 sm:w-4 md:w-6 text-center">
+                                {form.vehicleId === vehicle.vehicleId ? form.people : 1}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  if (form.vehicleId === vehicle.vehicleId && form.people < vehicle.passengerCapacity) {
+                                    setForm(prev => ({ ...prev, people: prev.people + 1 }))
+                                  }
+                                }}
+                                disabled={form.vehicleId !== vehicle.vehicleId || form.people >= vehicle.passengerCapacity}
+                                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed text-gray-700 rounded-full text-[10px] sm:text-xs md:text-sm font-bold transition-colors"
+                              >
+                                +
+                              </button>
+                          </div>
+
+                          {/* Bags Control */}
+                          <div className="flex items-center gap-0.5">
+                            <span className="text-[7px] sm:text-[8px] md:text-xs text-gray-600 font-medium w-8 sm:w-10 md:w-14">Bags:</span>
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  if (form.vehicleId === vehicle.vehicleId && form.bags > 0) {
+                                    setForm(prev => ({ ...prev, bags: prev.bags - 1 }))
+                                  }
+                                }}
+                                disabled={form.vehicleId !== vehicle.vehicleId || form.bags <= 0}
+                                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed text-gray-700 rounded-full text-[10px] sm:text-xs md:text-sm font-bold transition-colors"
+                              >
+                                −
+                              </button>
+                              <span className="text-[10px] sm:text-xs md:text-sm font-bold text-gray-900 w-3 sm:w-4 md:w-6 text-center">
+                                {form.vehicleId === vehicle.vehicleId ? form.bags : 0}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  if (form.vehicleId === vehicle.vehicleId && form.bags < vehicle.luggageCapacity) {
+                                    setForm(prev => ({ ...prev, bags: prev.bags + 1 }))
+                                  }
+                                }}
+                                disabled={form.vehicleId !== vehicle.vehicleId || form.bags >= vehicle.luggageCapacity}
+                                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed text-gray-700 rounded-full text-[10px] sm:text-xs md:text-sm font-bold transition-colors"
+                              >
+                                +
+                              </button>
+                          </div>
                         </div>
 
-                        {/* Section 3: Fare */}
-                        <div className="text-right">
-                          <div className="font-bold text-[#FC5E39] text-sm md:text-base">${vehicle.totalFare.toFixed(2)}</div>
+                        {/* Section 3: Fare, Distance & Time */}
+                        <div className="text-right flex flex-col items-end shrink-0">
+                          <div className="font-bold text-[#FC5E39] text-[10px] sm:text-sm md:text-base">${vehicle.totalFare.toFixed(2)}</div>
                           {(vehicle.tollAmount > 0 || vehicle.airportSurcharge > 0) && (
-                            <div className="text-[8px] md:text-[10px] text-gray-500 mt-0.5">
-                              {/* {vehicle.tollAmount > 0 && `+$${vehicle.tollAmount.toFixed(2)} toll`} */}
+                            <div className="text-[7px] sm:text-[8px] md:text-[10px] text-gray-500">
                               {vehicle.tollAmount > 0 && vehicle.airportSurcharge > 0 && ', '}
-                              {vehicle.airportSurcharge > 0 && `+$${vehicle.airportSurcharge.toFixed(2)} airport`}
+                              {vehicle.airportSurcharge > 0 && `+$${vehicle.airportSurcharge.toFixed(2)}`}
                             </div>
                           )}
+                          <div className="text-[7px] sm:text-[8px] md:text-xs text-gray-600 mt-0.5">
+                            <div>{fareData.distanceKm} km</div>
+                            <div>{fareData.durationMinutes} min</div>
+                          </div>
                         </div>
                       </button>
                     ))
