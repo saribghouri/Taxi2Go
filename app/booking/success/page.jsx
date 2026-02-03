@@ -1,10 +1,10 @@
 "use client"
 import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { CheckCircle, Loader2, Home, Calendar, MapPin, Car, CreditCard } from 'lucide-react'
+import { CheckCircle, Loader2, Home, Calendar, MapPin, Car } from 'lucide-react'
 import Link from 'next/link'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
 function BookingSuccessContent() {
   const searchParams = useSearchParams()
