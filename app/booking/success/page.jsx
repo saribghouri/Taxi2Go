@@ -216,6 +216,18 @@ function BookingSuccessContent() {
               </div>
             )}
 
+            {/* People and Bags */}
+            <div className="grid grid-cols-2 gap-4 pt-3 border-t border-gray-200">
+              <div>
+                <p className="text-xs text-gray-500 font-medium mb-1">Number of People</p>
+                <p className="text-sm font-semibold text-gray-900">{bookingDetails.people || 1}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500 font-medium mb-1">Number of Bags</p>
+                <p className="text-sm font-semibold text-gray-900">{bookingDetails.bags || 0}</p>
+              </div>
+            </div>
+
             {/* Additional Services */}
             {(bookingDetails.childSeat || bookingDetails.wheelchair || bookingDetails.specialRequirements) && (
               <div className="pt-3 border-t border-gray-200">

@@ -314,6 +314,8 @@ export const BookingForm = () => {
         vehicleType: form.vehicleName,      // V2: Optional display name
         childSeat: form.childSeat,
         wheelchair: form.wheelchair,
+        people: form.people,
+        bags: form.bags,
         specialRequirements: form.specialRequirements,
         passengerName: form.name,
         passengerPhone: form.phone,
