@@ -27,7 +27,7 @@ const vehicles = [
     bags: 3,
   },
   {
-    name: "Van",
+    name: "11 Seater",
     passengers: "1-11 Passengers",
     image: "/assets/images/11 seater.png",
     capacity: 11,
