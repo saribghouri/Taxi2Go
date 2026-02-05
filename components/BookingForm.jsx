@@ -1033,41 +1033,57 @@ export const BookingForm = () => {
           className="w-full bg-white rounded-3xl px-3 py-2 md:px-4 md:py-3 text-xs md:text-base text-gray-700 placeholder:text-gray-400 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors resize-none"
         />
         <div className="flex gap-2 p-1.5 md:p-2 bg-gray-50/50 rounded-2xl border border-gray-100">
-          <label className="flex-1 flex items-center justify-center py-1.5 md:py-2 cursor-pointer">
-            <input
-              type="radio"
-              name="payment"
-              value="cash"
-              checked={form.payment === "cash"}
-              onChange={handleChange}
-              className="mr-1.5 md:mr-2 accent-[#FC5E39]"
-            />
-            <span className="text-gray-700 font-medium text-xs md:text-sm">Cash</span>
-          </label>
-          <label className={`flex-1 flex items-center justify-center py-1.5 md:py-2 cursor-pointer ${form.isTtssSelected ? 'opacity-50 cursor-not-allowed' : ''}`}>
-            <input
-              type="radio"
-              name="payment"
-              value="card"
-              checked={form.payment === "card"}
-              onChange={handleChange}
-              disabled={form.isTtssSelected}
-              className="mr-1.5 md:mr-2 accent-[#FC5E39]"
-            />
-            <span className="text-gray-700 font-medium text-xs md:text-sm">Card</span>
-          </label>
-          <label className={`flex-1 flex items-center justify-center py-1.5 md:py-2 cursor-pointer ${form.isTtssSelected ? 'opacity-50 cursor-not-allowed' : ''}`}>
-            <input
-              type="radio"
-              name="payment"
-              value="cabcharge"
-              checked={form.payment === "cabcharge"}
-              onChange={handleChange}
-              disabled={form.isTtssSelected}
-              className="mr-1.5 md:mr-2 accent-[#FC5E39]"
-            />
-            <span className="text-gray-700 font-medium text-xs md:text-sm">Cabcharge</span>
-          </label>
+          {form.isTtssSelected ? (
+            // TTSS-specific payment option
+            <label className="flex-1 flex items-center justify-center py-1.5 md:py-2 cursor-default">
+              <input
+                type="radio"
+                name="payment"
+                value="cash"
+                checked={true}
+                readOnly
+                className="mr-1.5 md:mr-2 accent-[#FC5E39]"
+              />
+              <span className="text-gray-700 font-medium text-xs md:text-sm">Driver will collect TTSS payment</span>
+            </label>
+          ) : (
+            // Normal payment options
+            <>
+              <label className="flex-1 flex items-center justify-center py-1.5 md:py-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="payment"
+                  value="cash"
+                  checked={form.payment === "cash"}
+                  onChange={handleChange}
+                  className="mr-1.5 md:mr-2 accent-[#FC5E39]"
+                />
+                <span className="text-gray-700 font-medium text-xs md:text-sm">Cash</span>
+              </label>
+              <label className="flex-1 flex items-center justify-center py-1.5 md:py-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="payment"
+                  value="card"
+                  checked={form.payment === "card"}
+                  onChange={handleChange}
+                  className="mr-1.5 md:mr-2 accent-[#FC5E39]"
+                />
+                <span className="text-gray-700 font-medium text-xs md:text-sm">Card</span>
+              </label>
+              <label className="flex-1 flex items-center justify-center py-1.5 md:py-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="payment"
+                  value="cabcharge"
+                  checked={form.payment === "cabcharge"}
+                  onChange={handleChange}
+                  className="mr-1.5 md:mr-2 accent-[#FC5E39]"
+                />
+                <span className="text-gray-700 font-medium text-xs md:text-sm">Cabcharge</span>
+              </label>
+            </>
+          )}
         </div>
       </div>
 
