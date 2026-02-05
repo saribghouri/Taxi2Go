@@ -235,10 +235,14 @@ export const BookingForm = () => {
   const onPickupPlaceChanged = () => {
     if (pickupAutocompleteRef.current !== null) {
       const place = pickupAutocompleteRef.current.getPlace()
-      if (place.formatted_address && place.geometry) {
+      if (place.geometry) {
+        // Use place.name to preserve establishment/airport names (like "Sydney Airport")
+        // Otherwise fall back to formatted_address for regular addresses
+        const displayAddress = place.name || place.formatted_address;
+        
         setForm(prev => ({
           ...prev,
-          pickup: place.formatted_address,
+          pickup: displayAddress,
           pickupLat: place.geometry.location.lat(),
           pickupLng: place.geometry.location.lng()
         }))
@@ -254,10 +258,14 @@ export const BookingForm = () => {
   const onDropoffPlaceChanged = () => {
     if (dropoffAutocompleteRef.current !== null) {
       const place = dropoffAutocompleteRef.current.getPlace()
-      if (place.formatted_address && place.geometry) {
+      if (place.geometry) {
+        // Use place.name to preserve establishment/airport names (like "Sydney Airport")
+        // Otherwise fall back to formatted_address for regular addresses
+        const displayAddress = place.name || place.formatted_address;
+        
         setForm(prev => ({
           ...prev,
-          dropoff: place.formatted_address,
+          dropoff: displayAddress,
           dropoffLat: place.geometry.location.lat(),
           dropoffLng: place.geometry.location.lng()
         }))
@@ -790,7 +798,12 @@ export const BookingForm = () => {
                         {/* Section 3: Fare, Distance & Time */}
                         <div className="text-right flex flex-col items-end shrink-0">
                           <div className="font-bold text-[#FC5E39] text-[10px] sm:text-sm md:text-base">${vehicle.totalFare.toFixed(2)}</div>
-                          
+                          {(vehicle.tollAmount > 0 || vehicle.airportSurcharge > 0) && (
+                            <div className="text-[7px] sm:text-[8px] md:text-[10px] text-gray-500">
+                              {vehicle.tollAmount > 0 && vehicle.airportSurcharge > 0 && ', '}
+                              {vehicle.airportSurcharge > 0 && `+$${vehicle.airportSurcharge.toFixed(2)}`}
+                            </div>
+                          )}
                           <div className="text-[7px] sm:text-[8px] md:text-xs text-gray-600 mt-0.5">
                             <div>{fareData.distanceKm} km</div>
                             <div>{fareData.durationMinutes} min</div>
