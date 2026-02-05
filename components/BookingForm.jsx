@@ -31,10 +31,12 @@ export const BookingForm = () => {
 
   // Form state
   const [form, setForm] = useState({
-    pickup: "",
+    pickup: "",              // Actual address for backend validation
+    pickupDisplay: "",       // Display name for UI
     pickupLat: null,
     pickupLng: null,
-    dropoff: "",
+    dropoff: "",             // Actual address for backend validation
+    dropoffDisplay: "",      // Display name for UI
     dropoffLat: null,
     dropoffLng: null,
     vehicleId: "",      // NEW: Store MongoDB ObjectId
@@ -235,14 +237,12 @@ export const BookingForm = () => {
   const onPickupPlaceChanged = () => {
     if (pickupAutocompleteRef.current !== null) {
       const place = pickupAutocompleteRef.current.getPlace()
-      if (place.geometry) {
-        // Use place.name to preserve establishment/airport names (like "Sydney Airport")
-        // Otherwise fall back to formatted_address for regular addresses
-        const displayAddress = place.name || place.formatted_address;
-        
+      if (place.formatted_address && place.geometry) {
+        // Store both: formatted_address for backend validation, name for UI display
         setForm(prev => ({
           ...prev,
-          pickup: displayAddress,
+          pickup: place.formatted_address,           // For backend (has NSW, Australia)
+          pickupDisplay: place.name || place.formatted_address,  // For UI (user-friendly)
           pickupLat: place.geometry.location.lat(),
           pickupLng: place.geometry.location.lng()
         }))
@@ -258,14 +258,12 @@ export const BookingForm = () => {
   const onDropoffPlaceChanged = () => {
     if (dropoffAutocompleteRef.current !== null) {
       const place = dropoffAutocompleteRef.current.getPlace()
-      if (place.geometry) {
-        // Use place.name to preserve establishment/airport names (like "Sydney Airport")
-        // Otherwise fall back to formatted_address for regular addresses
-        const displayAddress = place.name || place.formatted_address;
-        
+      if (place.formatted_address && place.geometry) {
+        // Store both: formatted_address for backend validation, name for UI display
         setForm(prev => ({
           ...prev,
-          dropoff: displayAddress,
+          dropoff: place.formatted_address,          // For backend (has NSW, Australia)
+          dropoffDisplay: place.name || place.formatted_address, // For UI (user-friendly)
           dropoffLat: place.geometry.location.lat(),
           dropoffLng: place.geometry.location.lng()
         }))
@@ -478,9 +476,11 @@ export const BookingForm = () => {
                         location: { lat: latitude, lng: longitude }
                       })
                       if (result.results[0]) {
+                        const address = result.results[0].formatted_address
                         setForm(prev => ({
                           ...prev,
-                          pickup: result.results[0].formatted_address,
+                          pickup: address,           // For backend
+                          pickupDisplay: address,    // For UI (formatted_address for geolocation)
                           pickupLat: latitude,
                           pickupLng: longitude
                         }))
@@ -528,8 +528,12 @@ export const BookingForm = () => {
             <input
               type="text"
               name="pickup"
-              value={form.pickup}
-              onChange={(e) => setForm(prev => ({ ...prev, pickup: e.target.value }))}
+              value={form.pickupDisplay || form.pickup}
+              onChange={(e) => setForm(prev => ({
+                ...prev,
+                pickup: e.target.value,        // Backend address
+                pickupDisplay: e.target.value  // Display name
+              }))}
               placeholder="Enter pickup location"
               className="w-full bg-white rounded-full pl-10 md:pl-12 pr-10 py-2 md:py-3 text-xs md:text-base text-gray-700 placeholder:text-gray-400 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors"
             />
@@ -554,9 +558,11 @@ export const BookingForm = () => {
                         location: { lat: latitude, lng: longitude }
                       })
                       if (result.results[0]) {
+                        const address = result.results[0].formatted_address
                         setForm(prev => ({
                           ...prev,
-                          dropoff: result.results[0].formatted_address,
+                          dropoff: address,          // For backend
+                          dropoffDisplay: address,   // For UI (formatted_address for geolocation)
                           dropoffLat: latitude,
                           dropoffLng: longitude
                         }))
@@ -604,8 +610,12 @@ export const BookingForm = () => {
             <input
               type="text"
               name="dropoff"
-              value={form.dropoff}
-              onChange={(e) => setForm(prev => ({ ...prev, dropoff: e.target.value }))}
+              value={form.dropoffDisplay || form.dropoff}
+              onChange={(e) => setForm(prev => ({
+                ...prev,
+                dropoff: e.target.value,        // Backend address
+                dropoffDisplay: e.target.value  // Display name
+              }))}
               placeholder="Enter destination"
               className="w-full bg-white rounded-full pl-10 md:pl-12 pr-10 py-2 md:py-3 text-xs md:text-base text-gray-700 placeholder:text-gray-400 outline-none border-2 border-orange-300/50 focus:border-[#FF6347] transition-colors"
             />
@@ -730,83 +740,77 @@ export const BookingForm = () => {
                           <div className="flex items-center gap-0.5">
                             <span className="text-[7px] sm:text-[8px] md:text-xs text-gray-600 font-medium w-8 sm:w-10 md:w-14">People:</span>
                             <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  if (form.vehicleId === vehicle.vehicleId && form.people > 1) {
-                                    setForm(prev => ({ ...prev, people: prev.people - 1 }))
-                                  }
-                                }}
-                                disabled={form.vehicleId !== vehicle.vehicleId || form.people <= 1}
-                                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed text-gray-700 rounded-full text-[10px] sm:text-xs md:text-sm font-bold transition-colors"
-                              >
-                                −
-                              </button>
-                              <span className="text-[10px] sm:text-xs md:text-sm font-bold text-gray-900 w-3 sm:w-4 md:w-6 text-center">
-                                {form.vehicleId === vehicle.vehicleId ? form.people : 1}
-                              </span>
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  if (form.vehicleId === vehicle.vehicleId && form.people < vehicle.passengerCapacity) {
-                                    setForm(prev => ({ ...prev, people: prev.people + 1 }))
-                                  }
-                                }}
-                                disabled={form.vehicleId !== vehicle.vehicleId || form.people >= vehicle.passengerCapacity}
-                                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed text-gray-700 rounded-full text-[10px] sm:text-xs md:text-sm font-bold transition-colors"
-                              >
-                                +
-                              </button>
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                if (form.vehicleId === vehicle.vehicleId && form.people > 1) {
+                                  setForm(prev => ({ ...prev, people: prev.people - 1 }))
+                                }
+                              }}
+                              disabled={form.vehicleId !== vehicle.vehicleId || form.people <= 1}
+                              className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed text-gray-700 rounded-full text-[10px] sm:text-xs md:text-sm font-bold transition-colors"
+                            >
+                              −
+                            </button>
+                            <span className="text-[10px] sm:text-xs md:text-sm font-bold text-gray-900 w-3 sm:w-4 md:w-6 text-center">
+                              {form.vehicleId === vehicle.vehicleId ? form.people : 1}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                if (form.vehicleId === vehicle.vehicleId && form.people < vehicle.passengerCapacity) {
+                                  setForm(prev => ({ ...prev, people: prev.people + 1 }))
+                                }
+                              }}
+                              disabled={form.vehicleId !== vehicle.vehicleId || form.people >= vehicle.passengerCapacity}
+                              className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed text-gray-700 rounded-full text-[10px] sm:text-xs md:text-sm font-bold transition-colors"
+                            >
+                              +
+                            </button>
                           </div>
 
                           {/* Bags Control */}
                           <div className="flex items-center gap-0.5">
                             <span className="text-[7px] sm:text-[8px] md:text-xs text-gray-600 font-medium w-8 sm:w-10 md:w-14">Bags:</span>
                             <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  if (form.vehicleId === vehicle.vehicleId && form.bags > 0) {
-                                    setForm(prev => ({ ...prev, bags: prev.bags - 1 }))
-                                  }
-                                }}
-                                disabled={form.vehicleId !== vehicle.vehicleId || form.bags <= 0}
-                                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed text-gray-700 rounded-full text-[10px] sm:text-xs md:text-sm font-bold transition-colors"
-                              >
-                                −
-                              </button>
-                              <span className="text-[10px] sm:text-xs md:text-sm font-bold text-gray-900 w-3 sm:w-4 md:w-6 text-center">
-                                {form.vehicleId === vehicle.vehicleId ? form.bags : 0}
-                              </span>
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation()
-                                  if (form.vehicleId === vehicle.vehicleId && form.bags < vehicle.luggageCapacity) {
-                                    setForm(prev => ({ ...prev, bags: prev.bags + 1 }))
-                                  }
-                                }}
-                                disabled={form.vehicleId !== vehicle.vehicleId || form.bags >= vehicle.luggageCapacity}
-                                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed text-gray-700 rounded-full text-[10px] sm:text-xs md:text-sm font-bold transition-colors"
-                              >
-                                +
-                              </button>
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                if (form.vehicleId === vehicle.vehicleId && form.bags > 0) {
+                                  setForm(prev => ({ ...prev, bags: prev.bags - 1 }))
+                                }
+                              }}
+                              disabled={form.vehicleId !== vehicle.vehicleId || form.bags <= 0}
+                              className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed text-gray-700 rounded-full text-[10px] sm:text-xs md:text-sm font-bold transition-colors"
+                            >
+                              −
+                            </button>
+                            <span className="text-[10px] sm:text-xs md:text-sm font-bold text-gray-900 w-3 sm:w-4 md:w-6 text-center">
+                              {form.vehicleId === vehicle.vehicleId ? form.bags : 0}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                if (form.vehicleId === vehicle.vehicleId && form.bags < vehicle.luggageCapacity) {
+                                  setForm(prev => ({ ...prev, bags: prev.bags + 1 }))
+                                }
+                              }}
+                              disabled={form.vehicleId !== vehicle.vehicleId || form.bags >= vehicle.luggageCapacity}
+                              className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed text-gray-700 rounded-full text-[10px] sm:text-xs md:text-sm font-bold transition-colors"
+                            >
+                              +
+                            </button>
                           </div>
                         </div>
 
                         {/* Section 3: Fare, Distance & Time */}
                         <div className="text-right flex flex-col items-end shrink-0">
-                          <div className="font-bold text-[#FC5E39] text-[10px] sm:text-sm md:text-base">${vehicle.totalFare.toFixed(2)}</div>
-                          {(vehicle.tollAmount > 0 || vehicle.airportSurcharge > 0) && (
-                            <div className="text-[7px] sm:text-[8px] md:text-[10px] text-gray-500">
-                              {vehicle.tollAmount > 0 && vehicle.airportSurcharge > 0 && ', '}
-                              {vehicle.airportSurcharge > 0 && `+$${vehicle.airportSurcharge.toFixed(2)}`}
-                            </div>
-                          )}
-                          <div className="text-[7px] sm:text-[8px] md:text-xs text-gray-600 mt-0.5">
-                            <div>{fareData.distanceKm} km</div>
-                            <div>{fareData.durationMinutes} min</div>
+                          <div className="flex flex-col items-start font-bold text-[7px] sm:text-[8px] md:text-xs mt-0.5">
+                            <div className="font-bold text-[#FC5E39] text-[10px] sm:text-sm md:text-base">${vehicle.totalFare.toFixed(2)}</div>
+                            <div>DIS: {fareData.distanceKm} km</div>
+                            <div>ETA: {fareData.durationMinutes} min</div>
                           </div>
                         </div>
                       </button>
