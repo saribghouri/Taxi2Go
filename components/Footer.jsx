@@ -82,7 +82,7 @@ export const Footer = () => {
       <div className="pt-8 border-t border-gray-700">
         <div className="text-center">
           <p className="text-gray-600 text-sm">
-            © 2025 Taxi2Go Pty Ltd. All rights reserved.
+            © 2026 Taxi2Go. All rights reserved.
           </p>
         </div>
       </div>
