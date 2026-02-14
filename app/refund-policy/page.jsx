@@ -57,7 +57,7 @@ export default function RefundPolicyPage() {
                 </h2>
                 <div className="ml-11 space-y-3">
                   <p className="text-gray-700">
-                    • If you cancel a booking before the cutoff time (e.g., 15 minutes before pickup), you are eligible for a full refund.
+                    • If you cancel a booking before the cutoff time (e.g., 30 minutes before pickup), you are eligible for a full refund.
                   </p>
                   <p className="text-gray-700">
                     • Late cancellations may incur a cancellation fee deducted from the refund.
