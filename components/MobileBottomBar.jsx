@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export const MobileBottomBar = () => {
   const [showBar, setShowBar] = useState(false);
@@ -47,16 +48,12 @@ export const MobileBottomBar = () => {
         </div>
 
         {/* Right side - Button */}
-        <button
-          onClick={() => {
-            if (typeof window !== 'undefined') {
-              document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
-            }
-          }}
+        <Link
+          href="/#hero"
           className="bg-white hover:bg-gray-100 text-[#FF6347] font-bold px-6 py-2.5 rounded-full transition-colors shadow-lg text-sm whitespace-nowrap"
         >
           Book Now
-        </button>
+        </Link>
       </div>
     </div>
   );

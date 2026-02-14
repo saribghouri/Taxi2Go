@@ -25,36 +25,36 @@ export const Header = () => {
         
         <div className="flex items-center justify-between w-[80%] gap-2 sm:gap-3 md:gap-4 lg:gap-6 bg-[#ffff]/70 backdrop-blur-xs rounded-full px-3 sm:px-4 md:px-5 lg:px-8 py-2 sm:py-2.5 md:py-3">
           <nav className="hidden xl:flex items-center gap-3 lg:gap-10 text-black font-bold">
-            <a
-              href="#home"
+            <Link
+              href="/#home"
               className="hover:text-[#FF6347] text-sm md:text-base lg:text-lg xl:text-[20px] transition-colors"
             >
               Home
-            </a>
-            <a
-              href="#about"
+            </Link>
+            <Link
+              href="/#about"
               className="hover:text-[#FF6347] text-sm md:text-base lg:text-lg xl:text-[20px] transition-colors"
             >
               About Us
-            </a>
-            <a
-              href="#services"
+            </Link>
+            <Link
+              href="/#services"
               className="hover:text-[#FF6347] text-sm md:text-base lg:text-lg xl:text-[20px] transition-colors"
             >
               Services
-            </a>
-            <a
+            </Link>
+            <Link
               href="/lost-item"
               className="hover:text-[#FF6347] text-sm md:text-base lg:text-lg xl:text-[20px] transition-colors"
             >
               Lost Item
-            </a>
-            <a
-              href="#contact"
+            </Link>
+            <Link
+              href="/#contact"
               className="hover:text-[#FF6347] text-sm md:text-base lg:text-lg xl:text-[20px] transition-colors"
             >
               Contact Us
-            </a>
+            </Link>
           </nav>
           <div className=" flex justify-between items-center gap-[60px]">
             <div className="mt-[11px]">
