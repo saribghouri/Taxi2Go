@@ -41,11 +41,7 @@ export const Header = () => {
           </nav>
 <div className=" flex justify-between items-center gap-[60px]">
 
-    <div>
-      <a href="tel:0424106797" className="font-bold text-sm md:text-base lg:text-lg xl:text-[20px] text-black hover:text-[#FF6347] transition-colors cursor-pointer">
-        0424106797
-      </a>
-    </div>
+    
           <div className="mt-[11px]">
       <a
         href="tel:0424106797"
