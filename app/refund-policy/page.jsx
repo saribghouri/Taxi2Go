@@ -3,7 +3,7 @@
 import { Header } from "../../components/Header";
 import { MobileHeader } from "../../components/MobileHeader";
 import { Footer } from "../../components/Footer";
-import { DollarSign, Clock, AlertCircle, CheckCircle } from "lucide-react";
+import { DollarSign, Clock, Mail, CreditCard } from "lucide-react";
 
 export default function RefundPolicyPage() {
   return (
