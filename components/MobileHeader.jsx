@@ -33,7 +33,10 @@ export const MobileHeader = () => {
 
         <a
           href="tel:0424106797"
-          className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-white bg-[#FF6347] hover:bg-[#e54d2e] font-semibold text-sm transition-colors whitespace-nowrap"
+          className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-white bg-[#FF6347] hover:bg-[#e54d2e] font-semibold text-sm transition-colors whitespace-nowrap animate-bounce"
+          style={{
+            animation: "bounce 1s infinite",
+          }}
         >
           <Phone className="w-4 h-4" />
           <span className="hidden sm:inline">Call Now</span>
