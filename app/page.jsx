@@ -57,7 +57,7 @@ export default function Home() {
       <nav className="block lg:hidden fixed top-0 left-0 w-full z-50 bg-white shadow-sm px-4 py-4 flex justify-between items-center gap-4">
         <button
           type="button"
-          className="text-gray-900"
+          className="text-gray-900 cursor-pointer"
           aria-label="Open menu"
           onClick={() => setIsDrawerOpen(true)}
         >
@@ -77,7 +77,7 @@ export default function Home() {
         {/* Right: Search - icon and bar */}
         <div className="flex items-center gap-3">
           {/* Search bar on md screens */}
-          <div className="hidden md:block">
+          {/* <div className="hidden md:block">
             <div className="relative w-48 lg:w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
               <input
@@ -86,11 +86,11 @@ export default function Home() {
                 className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B4A]/30 focus:border-[#FF6B4A]"
               />
             </div>
-          </div>
+          </div> */}
           {/* Search icon on all screens */}
-          <button type="button" className="text-gray-900" aria-label="Search">
+          {/* <button type="button" className="text-gray-900" aria-label="Search">
             <Search size={24} />
-          </button>
+          </button> */}
         </div>
       </nav>
 
