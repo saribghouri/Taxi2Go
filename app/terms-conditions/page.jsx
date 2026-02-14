@@ -1,13 +1,17 @@
 "use client";
 
 import { Header } from "../../components/Header";
+import { MobileHeader } from "../../components/MobileHeader";
 import { Footer } from "../../components/Footer";
 import { FileText, CheckCircle } from "lucide-react";
 
 export default function TermsConditionsPage() {
   return (
     <div className="min-h-screen bg-white font-sans">
-      <Header />
+      <div className="hidden lg:block">
+        <Header />
+      </div>
+      <MobileHeader />
       
       <main className="pt-32 pb-16 px-4">
         <div className="container mx-auto max-w-4xl">
