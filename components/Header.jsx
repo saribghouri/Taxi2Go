@@ -1,19 +1,14 @@
 "use client";
 
-import {
-  Search,
-  Facebook,
-  Instagram,
-  Youtube,
-  Linkedin,
-  Phone,
-} from "lucide-react";
+import { Phone } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+
 export const Header = () => {
   return (
     <header className="absolute top-0 left-0 right-0 z-50 px-2 sm:px-4 md:px-6 lg:px-8 pt-4 sm:pt-5 md:pt-6">
       <div className="px-4 sm:px-8 md:px-12 lg:px-[60px] mx-auto flex items-center items-center justify-between">
-        <div className="flex-shrink-0">
+        <Link href="/" className="flex-shrink-0">
           <div className="relative w-[120px] sm:w-[150px] md:w-[180px] lg:w-[200px] h-[40px] sm:h-[50px] md:h-[55px] lg:h-[60px]">
             <div className="flex items-center mt-[-12px] sm:mt-[-14px] md:mt-[-16px] lg:mt-[-18px]">
               <Image
@@ -26,7 +21,8 @@ export const Header = () => {
               />
             </div>
           </div>
-        </div>
+        </Link>
+        
         <div className="flex items-center justify-between w-[80%] gap-2 sm:gap-3 md:gap-4 lg:gap-6 bg-[#ffff]/70 backdrop-blur-xs rounded-full px-3 sm:px-4 md:px-5 lg:px-8 py-2 sm:py-2.5 md:py-3">
           <nav className="hidden xl:flex items-center gap-3 lg:gap-10 text-black font-bold">
             <a
