@@ -1,17 +1,13 @@
 "use client";
 
 import { Header } from "../../components/Header";
-import { MobileHeader } from "../../components/MobileHeader";
 import { Footer } from "../../components/Footer";
 import { Shield, CheckCircle, Heart, AlertCircle } from "lucide-react";
 
 export default function SafetyCompliancePage() {
   return (
     <div className="min-h-screen bg-white font-sans">
-      <div className="hidden lg:block">
-        <Header />
-      </div>
-      <MobileHeader />
+      <Header />
       
       <main className="pt-32 pb-16 px-4">
         <div className="container mx-auto max-w-4xl">

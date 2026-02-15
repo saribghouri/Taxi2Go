@@ -7,7 +7,6 @@ import { Features } from "../components/Features";
 import { Testimonials } from "../components/Testimonials";
 import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
-import { MobileHeader } from "../components/MobileHeader";
 import { BrandPositioning } from "../components/BrandPositioning";
 import { FinalCTA } from "../components/FinalCTA";
 import { MobileBottomBar } from "../components/MobileBottomBar";
@@ -45,13 +44,7 @@ export default function Home() {
   };
   return (
     <div className="min-h-screen bg-white font-sans">
-      {/* Desktop Header - hidden on mobile */}
-      <div className="hidden lg:block">
-        <Header />
-      </div>
-      
-      {/* Mobile Header with Drawer */}
-      <MobileHeader />
+      <Header />
 
       <main>
         <div ref={heroRef}>

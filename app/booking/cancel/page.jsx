@@ -3,6 +3,7 @@ import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { XCircle, Loader2, Home, Calendar, RotateCcw } from 'lucide-react'
 import Link from 'next/link'
+import { Header } from '../../../components/Header'
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000'
 
@@ -25,18 +26,23 @@ function BookingCancelContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center p-4">
+      <>
+        <Header />
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
           <Loader2 className="w-16 h-16 animate-spin text-[#FC5E39] mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Processing...</h2>
           <p className="text-gray-600">Please wait</p>
         </div>
       </div>
+      </>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center p-4">
+    <>
+      <Header />
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-2xl w-full">
         {/* Cancel Icon */}
         <div className="text-center mb-8">
@@ -123,6 +129,7 @@ function BookingCancelContent() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

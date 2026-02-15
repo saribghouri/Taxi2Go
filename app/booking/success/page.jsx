@@ -3,6 +3,7 @@ import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { CheckCircle, Loader2, Home, Calendar, MapPin, Car } from 'lucide-react'
 import Link from 'next/link'
+import { Header } from '../../../components/Header'
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
@@ -58,19 +59,24 @@ function BookingSuccessContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center p-4">
+      <>
+        <Header />
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
           <Loader2 className="w-16 h-16 animate-spin text-[#FC5E39] mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Processing Payment...</h2>
           <p className="text-gray-600">Please wait while we confirm your booking</p>
         </div>
       </div>
+      </>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center p-4">
+      <>
+        <Header />
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full text-center">
           <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <span className="text-4xl">❌</span>
@@ -86,11 +92,14 @@ function BookingSuccessContent() {
           </Link>
         </div>
       </div>
+      </>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center p-4">
+    <>
+      <Header />
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-2xl w-full">
         {/* Success Icon */}
         <div className="text-center mb-8">
@@ -365,6 +374,7 @@ function BookingSuccessContent() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 
