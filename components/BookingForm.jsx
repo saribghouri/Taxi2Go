@@ -238,11 +238,14 @@ export const BookingForm = () => {
     if (pickupAutocompleteRef.current !== null) {
       const place = pickupAutocompleteRef.current.getPlace()
       if (place.formatted_address && place.geometry) {
-        // Store both: formatted_address for backend validation, name for UI display
+        // Combine name + address to match autocomplete dropdown text
+        const displayText = place.name && !place.formatted_address.includes(place.name)
+          ? `${place.name}, ${place.formatted_address}`
+          : place.formatted_address
         setForm(prev => ({
           ...prev,
-          pickup: place.formatted_address,           // For backend (has NSW, Australia)
-          pickupDisplay: place.name || place.formatted_address,  // For UI (user-friendly)
+          pickup: place.formatted_address,
+          pickupDisplay: displayText,
           pickupLat: place.geometry.location.lat(),
           pickupLng: place.geometry.location.lng()
         }))
@@ -259,11 +262,14 @@ export const BookingForm = () => {
     if (dropoffAutocompleteRef.current !== null) {
       const place = dropoffAutocompleteRef.current.getPlace()
       if (place.formatted_address && place.geometry) {
-        // Store both: formatted_address for backend validation, name for UI display
+        // Combine name + address to match autocomplete dropdown text
+        const displayText = place.name && !place.formatted_address.includes(place.name)
+          ? `${place.name}, ${place.formatted_address}`
+          : place.formatted_address
         setForm(prev => ({
           ...prev,
-          dropoff: place.formatted_address,          // For backend (has NSW, Australia)
-          dropoffDisplay: place.name || place.formatted_address, // For UI (user-friendly)
+          dropoff: place.formatted_address,
+          dropoffDisplay: displayText,
           dropoffLat: place.geometry.location.lat(),
           dropoffLng: place.geometry.location.lng()
         }))
