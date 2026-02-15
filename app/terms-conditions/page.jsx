@@ -28,7 +28,7 @@ export default function TermsConditionsPage() {
           <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 space-y-8">
             <div>
               <p className="text-lg text-gray-700 leading-relaxed">
-                Welcome to Taxi2Go, a brand operated by <strong>The Captain Taxis Pty Ltd</strong>. By using our services, you agree to the following terms:
+                Welcome to Taxi2Go, a brand operated by <strong>The Captain Taxis</strong>. By using our services, you agree to the following terms:
               </p>
             </div>
 
@@ -46,7 +46,15 @@ export default function TermsConditionsPage() {
                   </li>
                   <li className="text-gray-700 flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span>We require the Passenger's Name, Mobile and E-mail address.</span>
+                  </li>
+                  <li className="text-gray-700 flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
                     <span>Prices are fixed at the time of booking and are inclusive of GST.</span>
+                  </li>
+                  <li className="text-gray-700 flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span>The Driver will wait for 5 minutes at the pick-up point and will attempt to make contact before Cancelling the Trip and charging a $10 No Show Fee.</span>
                   </li>
                 </ul>
               </div>
@@ -60,7 +68,7 @@ export default function TermsConditionsPage() {
                 <ul className="space-y-2 ml-11">
                   <li className="text-gray-700 flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span>We accept card payments, cash, and other approved methods.</span>
+                    <span>We accept Credit and Debit Card payments, cash, and other approved methods.</span>
                   </li>
                   <li className="text-gray-700 flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
@@ -78,11 +86,11 @@ export default function TermsConditionsPage() {
                 <ul className="space-y-2 ml-11">
                   <li className="text-gray-700 flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span>You may cancel your ride before the scheduled pickup time.</span>
+                    <span>You may cancel your ride not less than 30 minutes before the scheduled pickup time, without incurring a Cancellation Fee.</span>
                   </li>
                   <li className="text-gray-700 flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span>Cancellation fees may apply if canceled late (see Refund Policy).</span>
+                    <span>Cancellation fees may apply if cancelled late (see Refund Policy).</span>
                   </li>
                 </ul>
               </div>
@@ -114,7 +122,7 @@ export default function TermsConditionsPage() {
                 <ul className="space-y-2 ml-11">
                   <li className="text-gray-700 flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span>Taxi2Go, as a brand under The Captain Taxis Pty Ltd, is not liable for personal items left in the vehicle.</span>
+                    <span>Taxi2Go, as a brand under The Captain Taxis, is not liable for personal items left in the vehicle.</span>
                   </li>
                   <li className="text-gray-700 flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
@@ -130,7 +138,7 @@ export default function TermsConditionsPage() {
                   Intellectual Property
                 </h2>
                 <p className="text-gray-700 ml-11">
-                  All content on the Taxi2Go platform is owned by The Captain Taxis Pty Ltd and may not be copied or reused without permission.
+                  All content on the Taxi2Go platform is owned by The Captain Taxis and may not be copied or reused without permission.
                 </p>
               </div>
 

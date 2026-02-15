@@ -28,7 +28,7 @@ export default function SafetyCompliancePage() {
           <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 space-y-8">
             <div>
               <p className="text-lg text-gray-700 leading-relaxed">
-                At Taxi2Go, your safety is our top priority. Operating under <strong>The Captain Taxis Pty Ltd</strong>, we strictly adhere to all local and state regulations for passenger transport in Australia.
+                At Taxi2Go, your safety is our top priority. Operating under <strong>The Captain Taxis</strong>, we strictly adhere to all local and state regulations for passenger transport in Australia.
               </p>
             </div>
 

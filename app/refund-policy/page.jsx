@@ -28,7 +28,7 @@ export default function RefundPolicyPage() {
           <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 space-y-8">
             <div>
               <p className="text-lg text-gray-700 leading-relaxed">
-                Taxi2Go operates under <strong>The Captain Taxis Pty Ltd</strong>. Our goal is to provide transparent and fair refund practices.
+                Taxi2Go operates under <strong>The Captain Taxis</strong>. Our goal is to provide transparent and fair refund practices.
               </p>
             </div>
 
@@ -57,7 +57,10 @@ export default function RefundPolicyPage() {
                 </h2>
                 <div className="ml-11 space-y-3">
                   <p className="text-gray-700">
-                    • If you cancel a booking before the cutoff time (e.g., 30 minutes before pickup), you are eligible for a full refund.
+                    • If you cancel a booking more than 30 minutes before pick-up, you are eligible for a full refund.
+                  </p>
+                  <p className="text-gray-700">
+                    • If you cancel a booking less than 30 minutes before pick-up, you may be eligible for a partial refund, at our discretion.
                   </p>
                   <p className="text-gray-700">
                     • Late cancellations may incur a cancellation fee deducted from the refund.

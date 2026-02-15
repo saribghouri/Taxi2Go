@@ -28,7 +28,7 @@ export default function PrivacyPolicyPage() {
           <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 space-y-8">
             <div>
               <p className="text-lg text-gray-700 leading-relaxed">
-                Taxi2Go, operating under <strong>The Captain Taxis Pty Ltd</strong>, is committed to protecting your personal information in compliance with the <strong>Privacy Act 1988 (Cth)</strong>.
+                Taxi2Go, operating under <strong>The Captain Taxis</strong>, is committed to protecting your personal information in compliance with the <strong>Privacy Act 1988 (Cth)</strong>.
               </p>
             </div>
 
