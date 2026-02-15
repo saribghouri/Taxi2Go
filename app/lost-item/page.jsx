@@ -1,14 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Header } from "../../components/Header";
 import { Footer } from "../../components/Footer";
-import { Phone, CheckCircle } from "lucide-react";
+import { Phone, CheckCircle, Upload, X, ImageIcon } from "lucide-react";
 
 export default function LostItemPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [images, setImages] = useState([]);
+  const [imageError, setImageError] = useState("");
+  const fileInputRef = useRef(null);
 
   const [formData, setFormData] = useState({
     full_name: "",
@@ -28,18 +31,69 @@ export default function LostItemPage() {
     setError(""); // Clear error on input change
   };
 
+  const handleImageAdd = (e) => {
+    const files = Array.from(e.target.files || []);
+    setImageError("");
+
+    // Filter to only image files
+    const imageFiles = files.filter((file) =>
+      ["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type)
+    );
+
+    if (imageFiles.length !== files.length) {
+      setImageError("Only image files (JPEG, PNG, WebP, GIF) are allowed");
+    }
+
+    // Check size (5MB max per file)
+    const validFiles = imageFiles.filter((file) => file.size <= 5 * 1024 * 1024);
+    if (validFiles.length !== imageFiles.length) {
+      setImageError("Each image must be less than 5MB");
+    }
+
+    // Check total count
+    const totalCount = images.length + validFiles.length;
+    if (totalCount > 5) {
+      setImageError("Maximum 5 images allowed");
+      const allowed = 5 - images.length;
+      setImages((prev) => [...prev, ...validFiles.slice(0, allowed)]);
+    } else {
+      setImages((prev) => [...prev, ...validFiles]);
+    }
+
+    // Reset file input so same file can be re-selected
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const handleImageRemove = (index) => {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+    setImageError("");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError("");
+    setImageError("");
+
+    // Validate images
+    if (images.length === 0) {
+      setImageError("Please upload at least 1 image of the lost item");
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
+      const body = new FormData();
+      // Append text fields
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value) body.append(key, value);
+      });
+      // Append images
+      images.forEach((file) => body.append("images", file));
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/lost-item/report`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        body,
       });
 
       const data = await response.json();
@@ -61,6 +115,7 @@ export default function LostItemPage() {
         item_description: "",
         notes: "",
       });
+      setImages([]);
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
     } finally {
@@ -263,6 +318,65 @@ export default function LostItemPage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF6347] focus:border-transparent resize-vertical"
                   placeholder="Please describe the item you lost (color, brand, distinguishing features, etc.)"
                 />
+              </div>
+
+              {/* Image Upload */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Upload Images <span className="text-red-500">*</span>
+                  <span className="font-normal text-gray-500 ml-1">({images.length}/5)</span>
+                </label>
+
+                {/* Upload area */}
+                {images.length < 5 && (
+                  <div
+                    onClick={() => fileInputRef.current?.click()}
+                    className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-[#FF6347] hover:bg-orange-50 transition-colors"
+                  >
+                    <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-sm text-gray-600 font-medium">
+                      Click to upload images
+                    </p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      JPEG, PNG, WebP or GIF — max 5MB each
+                    </p>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/gif"
+                      multiple
+                      onChange={handleImageAdd}
+                      className="hidden"
+                    />
+                  </div>
+                )}
+
+                {/* Error */}
+                {imageError && (
+                  <p className="mt-2 text-sm text-red-600">{imageError}</p>
+                )}
+
+                {/* Image previews */}
+                {images.length > 0 && (
+                  <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-4">
+                    {images.map((file, index) => (
+                      <div key={index} className="relative group aspect-square rounded-lg overflow-hidden border border-gray-200">
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={`Upload ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleImageRemove(index)}
+                          className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Additional Notes */}
