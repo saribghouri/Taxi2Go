@@ -466,7 +466,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Premium Sedan\",\n  \"passengerCapacity\": 4,\n  \"luggageCapacity\": 3,\n  \"status\": \"active\",\n  \"baseFare\": 55.00,\n  \"baseDistance\": 10,\n  \"dayPricePerKm\": 3.00,\n  \"nightPricePerKm\": 3.75,\n  \"nightStartTime\": \"22:00\",\n  \"nightEndTime\": \"06:00\",\n  \"longDistanceThreshold\": 50,\n  \"longDistancePricePerKm\": 2.20,\n  \"minimumFare\": 35.00,\n  \"airportSurcharge\": 5.00,\n  \"enableTollFees\": true,\n  \"childSeatPrice\": 10.00,\n  \"wheelchairPrice\": 15.00\n}"
+              "raw": "{\n  \"name\": \"Premium Sedan\",\n  \"passengerCapacity\": 4,\n  \"luggageCapacity\": 3,\n  \"status\": \"active\",\n  \"baseFare\": 55.00,\n  \"nightStartTime\": \"22:00\",\n  \"nightEndTime\": \"06:00\",\n  \"longDistanceThreshold\": 50,\n   \"minimumFare\": 35.00,\n  \"airportSurcharge\": 5.00,\n  \"enableTollFees\": true,\n  \"childSeatPrice\": 10.00,\n  \"wheelchairPrice\": 15.00\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/admin/companies/{{companyId}}/vehicles",
